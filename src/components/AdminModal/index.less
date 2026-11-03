@@ -1,0 +1,32 @@
+.admin-modal-wrap {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+.admin-modal-wrap .admin-modal {
+  top: 0;
+  padding-bottom: 0;
+  max-width: calc(100vw - 1rem);
+}
+.admin-modal .ant-modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 2rem);
+  overflow: hidden;
+}
+.admin-modal .ant-modal-header,
+.admin-modal .ant-modal-footer {
+  flex: none;
+}
+.admin-modal .ant-modal-body {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+}
+
+.admin-confirm-content {
+  max-height: max(3rem, calc(100dvh - 14rem));
+  overflow: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+}

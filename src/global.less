@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+/* 视口由应用壳持有；不要靠 body 滚动补偿子组件缺失的高度约束。 */
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+body {
+  color: #202226;
+}
+.starter-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.starter-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.starter-editor {
+  min-width: 0;
+}

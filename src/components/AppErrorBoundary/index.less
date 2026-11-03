@@ -1,0 +1,44 @@
+@import (reference) '../../styles/tokens.less';
+
+.app-error-boundary {
+  height: 100dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  > div {
+    margin: auto;
+    flex: none;
+    max-width: 100%;
+  }
+  background: @framework-color-bg-layout;
+}
+
+.app-error-boundary-detail {
+  margin-top: 16px;
+  padding: 12px;
+  background: @framework-color-surface;
+  border: 1px solid @framework-color-border;
+  border-radius: @framework-radius-sm;
+  max-width: 900px;
+  width: 100%;
+  overflow: auto;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    SF Mono,
+    Menlo,
+    Monaco,
+    Consolas,
+    'Liberation Mono',
+    'Courier New',
+    monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.85);
+}

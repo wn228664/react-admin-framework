@@ -1,0 +1,86 @@
+@import (reference) '../../styles/tokens.less';
+
+.search-form-container {
+  margin-bottom: @framework-space-md;
+  padding: @framework-space-md @framework-space-lg;
+  background: @framework-color-surface;
+  border: 1px solid @framework-color-border;
+  border-radius: @framework-radius-md;
+  box-shadow: @framework-shadow-sm;
+  flex-shrink: 0;
+  position: relative;
+
+  &.search-form--embedded {
+    background: @framework-color-surface-muted;
+    border-color: @framework-color-border;
+    box-shadow: none;
+  }
+
+  .search-form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: @framework-space-sm;
+  }
+
+  .search-form-more {
+    text-align: center;
+
+    .ant-btn-link {
+      color: @framework-color-primary;
+      font-size: 14px;
+      font-weight: 500;
+
+      &:hover {
+        color: @framework-color-primary-hover;
+      }
+    }
+  }
+
+  .toolbar-buttons {
+    display: flex;
+    gap: @framework-space-sm;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-only {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: @framework-space-sm;
+  }
+
+  .ant-form-item {
+    margin-bottom: 0;
+  }
+
+  .ant-form-item-label {
+    text-align: right;
+    white-space: nowrap;
+
+    label {
+      height: 32px;
+    }
+  }
+
+  .ant-form-item-control {
+    flex: 1;
+  }
+
+  .ant-input,
+  .ant-select-selector,
+  .ant-picker {
+    border-radius: @framework-radius-sm;
+  }
+}
+
+// 极短视口只滚动搜索组件自身，不能挤走表格分页或使页面增长。
+.search-form-container {
+  max-height: 25%;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.search-form-container .search-form-fields {
+  margin-bottom: 0.5rem;
+}

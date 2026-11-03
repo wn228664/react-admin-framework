@@ -1,0 +1,558 @@
+// 通用文件上传组件样式
+@import (reference) '../../styles/tokens.less';
+
+.upload-file-wrapper {
+  display: inline-block;
+
+  .upload-file-component {
+    .ant-upload-wrapper {
+      .ant-upload.ant-upload-select {
+        width: var(--upload-width, 104px) !important;
+        height: var(--upload-height, 104px) !important;
+        margin: 0;
+      }
+
+      .ant-upload-list-item-container {
+        width: var(--upload-width, 104px) !important;
+        height: var(--upload-height, 104px) !important;
+        margin: 0 8px 8px 0;
+      }
+
+      .ant-upload-list-item {
+        padding: 0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .ant-upload-select-picture-card {
+        border: 1px dashed @framework-color-border-strong;
+        border-radius: 8px;
+        background-color: @framework-color-surface-muted;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+          border-color: @framework-color-primary;
+          background-color: @framework-color-primary-bg;
+        }
+
+        &:active {
+          border-color: #096dd9;
+        }
+      }
+
+      .ant-upload-list-item-error {
+        border-color: #ff4d4f;
+        background-color: #fff2f0;
+      }
+
+      .ant-upload-list-item-done {
+        border-color: @framework-color-border-strong;
+      }
+
+      .ant-upload-drag {
+        border-radius: 8px;
+        border: 2px dashed @framework-color-border-strong;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+          border-color: @framework-color-primary;
+        }
+      }
+
+      // 列表模式样式优化
+      .ant-upload-list-text {
+        .ant-upload-list-item {
+          padding: 8px 12px;
+          border-radius: 4px;
+          border: 1px solid @framework-color-border;
+          transition: all 0.3s;
+          margin-top: 8px;
+
+          &:hover {
+            background: @framework-color-surface-muted;
+            border-color: @framework-color-border-strong;
+          }
+
+          .ant-upload-list-item-name {
+            color: @framework-color-primary;
+            cursor: pointer;
+
+            &:hover {
+              color: @framework-color-primary-hover;
+              text-decoration: underline;
+            }
+          }
+
+          .ant-upload-list-item-card-actions {
+            .anticon {
+              font-size: 14px;
+              color: @framework-color-text-regular;
+              transition: all 0.3s;
+
+              &:hover {
+                color: @framework-color-primary;
+              }
+            }
+          }
+        }
+      }
+
+      // 图片列表模式样式优化
+      .ant-upload-list-picture {
+        .ant-upload-list-item {
+          padding: 8px;
+          border: 1px solid @framework-color-border;
+          border-radius: 4px;
+          transition: all 0.3s;
+
+          &:hover {
+            background: @framework-color-surface-muted;
+            border-color: @framework-color-border-strong;
+          }
+
+          .ant-upload-list-item-thumbnail {
+            img {
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 自定义上传按钮样式
+  .upload-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: @framework-color-text-regular;
+    font-size: 14px;
+    transition: all 0.3s;
+
+    .anticon {
+      font-size: 24px;
+      color: @framework-color-text-muted;
+      transition: all 0.3s;
+    }
+
+    &:hover .anticon {
+      color: @framework-color-primary;
+    }
+  }
+
+  // 上传文件项样式
+  .upload-file-item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: @framework-color-surface-muted;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+
+    // 文件图标容器
+    .upload-file-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, @framework-color-surface-muted 0%, @framework-color-border 100%);
+      padding: 16px;
+      text-align: center;
+      word-break: break-all;
+
+      .anticon {
+        margin-bottom: 8px;
+      }
+
+      span {
+        font-size: 12px;
+        color: @framework-color-text-regular;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+    }
+
+    // 操作按钮容器
+    .upload-file-actions {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: @framework-glass-float-mask;
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(4px);
+
+      .anticon {
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 8px;
+        border-radius: 4px;
+
+        &:hover {
+          transform: scale(1.2);
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        &:active {
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    &:hover .upload-file-actions {
+      opacity: 1;
+    }
+
+    // 上传中状态
+    &.uploading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: linear-gradient(135deg, @framework-color-primary-bg 0%, @framework-color-primary-bg 100%);
+
+      .ant-spin {
+        margin-bottom: 12px;
+      }
+
+      .ant-progress {
+        width: 100%;
+      }
+    }
+  }
+
+  // 提示文字样式
+  .upload-tips {
+    margin-top: 8px;
+    color: @framework-color-text-muted;
+    font-size: 12px;
+    line-height: 1.5;
+
+    a {
+      color: @framework-color-primary;
+      text-decoration: none;
+      transition: color 0.3s;
+
+      &:hover {
+        color: @framework-color-primary-hover;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  // 拖拽上传特殊样式
+
+  .ant-upload-drag {
+    .ant-upload {
+      padding: 24px 16px;
+    }
+
+    .ant-upload-drag-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .ant-upload-drag-icon {
+        margin-bottom: 16px;
+
+        .anticon {
+          font-size: 48px;
+          color: @framework-color-primary;
+          transition: all 0.3s;
+        }
+      }
+
+      &:hover .anticon {
+        transform: scale(1.1);
+        color: @framework-color-primary-hover;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: @framework-color-text-regular;
+
+        &.ant-upload-text {
+          font-size: 16px;
+          color: @framework-color-text-primary;
+          font-weight: 500;
+          margin-bottom: 8px;
+        }
+
+        &.ant-upload-hint {
+          color: @framework-color-text-muted;
+          font-size: 14px;
+        }
+      }
+    }
+
+    &:hover {
+      border-color: @framework-color-primary;
+      background-color: @framework-color-primary-bg;
+
+      .ant-upload-drag-icon .anticon {
+        color: @framework-color-primary-hover;
+      }
+    }
+  }
+}
+
+// 拖拽上传专用包装器
+.drag-upload-wrapper {
+  width: 100%;
+
+  .ant-upload-drag {
+    border-radius: 8px;
+    border: 2px dashed @framework-color-border-strong;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      border-color: @framework-color-primary;
+      background-color: @framework-color-primary-bg;
+    }
+
+    .ant-upload-drag-icon {
+      .anticon {
+        font-size: 48px;
+        color: @framework-color-primary;
+        transition: all 0.3s;
+      }
+    }
+
+    &:hover .ant-upload-drag-icon .anticon {
+      transform: scale(1.1);
+      color: @framework-color-primary-hover;
+    }
+
+    .ant-upload-text {
+      font-size: 16px;
+      color: @framework-color-text-primary;
+      font-weight: 500;
+      margin: 16px 0 8px;
+    }
+
+    .ant-upload-hint {
+      font-size: 14px;
+      color: @framework-color-text-muted;
+    }
+  }
+}
+
+// 头像上传专用包装器
+.avatar-upload-wrapper {
+  display: inline-block;
+
+  .avatar-uploader {
+    .ant-upload {
+      width: var(--avatar-size, 120px);
+      height: var(--avatar-size, 120px);
+      border: 2px dashed @framework-color-border-strong;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: @framework-color-surface-muted;
+
+      &:hover {
+        border-color: @framework-color-primary;
+        background-color: @framework-color-primary-bg;
+        transform: scale(1.02);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .avatar-preview {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      img {
+        transition: transform 0.3s;
+      }
+
+      &:hover img {
+        transform: scale(1.1);
+      }
+    }
+
+    .avatar-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, @framework-color-surface-muted 0%, @framework-color-border 100%);
+      border-radius: 50%;
+      color: @framework-color-text-muted;
+      transition: all 0.3s;
+
+      .anticon {
+        transition: all 0.3s;
+      }
+
+      &:hover {
+        color: @framework-color-primary;
+
+        .anticon {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  .avatar-hint {
+    margin-top: 8px;
+    text-align: center;
+    color: @framework-color-text-muted;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+// 响应式适配
+@media (max-width: 768px) {
+  .upload-file-wrapper {
+    .upload-file-component {
+      .ant-upload.ant-upload-select {
+        width: 80px !important;
+        height: 80px !important;
+      }
+
+      .ant-upload-list-item-container {
+        width: 80px !important;
+        height: 80px !important;
+      }
+    }
+  }
+
+  .avatar-upload-wrapper {
+    .avatar-uploader {
+      .ant-upload {
+        width: 100px !important;
+        height: 100px !important;
+      }
+    }
+  }
+}
+
+// 深色主题支持
+@media (prefers-color-scheme: dark) {
+  .upload-file-wrapper {
+    .upload-file-component {
+      .ant-upload-select-picture-card {
+        background-color: #1f1f1f;
+        border-color: #434343;
+
+        &:hover {
+          background-color: #111b26;
+          border-color: #177ddc;
+        }
+      }
+    }
+
+    .upload-file-item {
+      background-color: #1f1f1f;
+
+      .upload-file-icon {
+        background: linear-gradient(135deg, #1f1f1f 0%, #141414 100%);
+      }
+    }
+
+    .upload-tips {
+      color: #8c8c8c;
+    }
+  }
+}
+
+// 动画效果
+@keyframes upload-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.upload-file-wrapper {
+  .ant-upload-list-item-container {
+    animation: upload-fade-in 0.3s ease-in-out;
+  }
+}
+
+// 无障碍支持
+.upload-file-wrapper {
+  .ant-upload:focus {
+    outline: 2px solid @framework-color-primary;
+    outline-offset: 2px;
+  }
+
+  .upload-file-actions .anticon:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+// 纯按钮模式 - 隐藏上传区域边框
+.button-only-upload {
+  .ant-upload-wrapper {
+    .ant-upload.ant-upload-select {
+      border: none !important;
+      background: transparent !important;
+      padding: 0 !important;
+      width: auto !important;
+      height: auto !important;
+
+      &:hover {
+        border: none !important;
+        background: transparent !important;
+      }
+    }
+
+    .ant-upload-select-picture-card {
+      border: none !important;
+      background: transparent !important;
+
+      &:hover {
+        border: none !important;
+        background: transparent !important;
+      }
+    }
+  }
+}

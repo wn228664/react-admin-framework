@@ -1,0 +1,19 @@
+.scroll-panel.ant-card {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.scroll-panel > .ant-card-head {
+  flex: none;
+}
+.scroll-panel > .ant-card-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+}

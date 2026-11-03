@@ -1,0 +1,64 @@
+.framework-layout {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+.framework-main {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+.framework-layout > .ant-layout-sider > .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.framework-navigation {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.framework-logo {
+  flex: none;
+  padding: 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  overflow: hidden;
+}
+.framework-header {
+  flex: none;
+  background: #fff;
+  z-index: 10;
+}
+.framework-header .ant-layout-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0 1rem;
+  background: #fff;
+}
+.framework-content {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 1.25rem;
+}
+@media (max-width: 767px), (max-height: 500px) {
+  .framework-content {
+    padding: 0.75rem;
+  }
+  .framework-header .ant-layout-header {
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-height: 500px) {
+  .framework-header .ant-layout-header {
+    height: 48px;
+    line-height: 48px;
+  }
+}

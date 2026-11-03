@@ -1,0 +1,22 @@
+.admin-drawer .ant-drawer-content-wrapper {
+  max-width: 100vw;
+  max-height: 100dvh;
+}
+/* 保留 Antd 关闭态的 display:none；不要在根节点强制 display:flex。 */
+.admin-drawer .ant-drawer-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.admin-drawer .ant-drawer-header,
+.admin-drawer .ant-drawer-footer {
+  flex: none;
+}
+.admin-drawer .ant-drawer-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+}

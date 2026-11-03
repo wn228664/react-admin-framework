@@ -1,0 +1,12 @@
+/* 每一层都传递可收缩的剩余高度；inactive 页仍保留实例，但不参与布局。 */
+.route-keep-alive-outlet,
+.route-keep-alive-entry,
+.route-keep-alive-fallback {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+.route-keep-alive-entry.inactive {
+  display: none;
+}

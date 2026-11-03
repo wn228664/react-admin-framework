@@ -1,0 +1,189 @@
+@import (reference) '../../styles/tokens.less';
+
+.sidebar-menu {
+  position: relative;
+  z-index: 1;
+  border-right: 0;
+  padding: @framework-space-sm;
+  background: transparent !important;
+
+  // 让 Menu 背景透明，交给 Sider 的毛玻璃背景承担“底色”
+  .ant-menu,
+  .ant-menu-light,
+  .ant-menu-light.ant-menu-inline,
+  .ant-menu-light.ant-menu-vertical,
+  .ant-menu-light.ant-menu-sub {
+    background: transparent !important;
+  }
+
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    --framework-dock-ty: 0px;
+    --framework-dock-scale: 1;
+    position: relative;
+    overflow: hidden;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 12px;
+    margin: 4px 0;
+    background: @framework-glass-menu-item-bg;
+    border: 1px solid @framework-glass-menu-item-border;
+    box-shadow: @framework-glass-menu-item-shadow;
+    cursor: pointer !important;
+    will-change: transform;
+    contain: paint;
+    backface-visibility: hidden;
+    transform: translate3d(0, var(--framework-dock-ty-js, var(--framework-dock-ty)), 0)
+      scale(var(--framework-dock-scale-js, var(--framework-dock-scale)));
+    transition:
+      transform 220ms @framework-dock-ease,
+      background 180ms ease,
+      border-color 180ms ease;
+  }
+
+  // 玻璃高光层（hover/selected 时更明显）
+  .ant-menu-item::before,
+  .ant-menu-submenu-title::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    transition: opacity 180ms ease;
+  }
+
+  .ant-menu-item:hover,
+  .ant-menu-submenu-title:hover {
+    --framework-dock-ty: -@framework-dock-menu-lift-hover;
+    --framework-dock-scale: @framework-dock-menu-scale-hover;
+    background: @framework-glass-menu-item-bg-hover;
+    border-color: @framework-glass-menu-item-border-hover;
+    box-shadow: @framework-glass-menu-item-shadow-hover;
+    z-index: 2;
+  }
+
+  // iOS-like press feedback
+  .ant-menu-item:active,
+  .ant-menu-submenu-title:active {
+    opacity: 0.92;
+  }
+
+  .ant-menu-item:hover::before,
+  .ant-menu-submenu-title:hover::before {
+    opacity: 1;
+  }
+
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    color: @framework-glass-menu-text;
+  }
+
+  .ant-menu-item .anticon,
+  .ant-menu-submenu-title .anticon {
+    color: @framework-glass-menu-icon;
+  }
+
+  .ant-menu-item:hover,
+  .ant-menu-submenu-title:hover {
+    color: @framework-glass-menu-text-strong;
+  }
+
+  .ant-menu-item:hover .anticon,
+  .ant-menu-submenu-title:hover .anticon {
+    color: @framework-glass-menu-icon-strong;
+  }
+
+  .ant-menu-item-selected {
+    --framework-dock-ty: -@framework-dock-menu-lift-far;
+    --framework-dock-scale: @framework-dock-menu-scale-far;
+    background: @framework-glass-menu-item-bg-selected !important;
+    border-color: @framework-glass-menu-item-border-selected !important;
+    box-shadow: @framework-glass-menu-item-shadow-selected;
+    color: @framework-glass-menu-text-strong !important;
+    font-weight: 600;
+    z-index: 1;
+  }
+
+  .ant-menu-item-selected:hover {
+    --framework-dock-ty: -@framework-dock-menu-lift-hover;
+    --framework-dock-scale: @framework-dock-menu-scale-hover;
+    z-index: 2;
+  }
+
+  .ant-menu-item-selected::before {
+    opacity: 1;
+    background: linear-gradient(135deg, rgba(10, 132, 255, 0.22), rgba(255, 255, 255, 0));
+  }
+
+  .ant-menu-item-selected .anticon {
+    color: @framework-glass-menu-accent !important;
+  }
+
+  .ant-menu-sub {
+    background: transparent !important;
+  }
+
+  .ant-menu-submenu-open > .ant-menu-submenu-title {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  // 自定义选中指示条（替代 antd 默认右侧 indicator）
+  .ant-menu-item::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    inset-inline-start: 10px;
+    width: 3px;
+    border-radius: 999px;
+    background: @framework-glass-menu-accent;
+    opacity: 0;
+    transform: none;
+    transition: opacity 180ms ease;
+  }
+
+  .ant-menu-item-selected::after {
+    opacity: 1;
+  }
+
+  // 确保内容在高光层之上
+  .ant-menu-title-content,
+  .anticon {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ant-menu-submenu-arrow {
+    z-index: 1;
+    color: rgba(15, 23, 42, 0.45);
+  }
+
+  // Dock-like magnify：邻近起伏（现代浏览器支持 :has 时启用）
+  @supports selector(:has(*)) {
+    // next sibling（hover 右侧/下方一项）
+    .ant-menu > .ant-menu-item:hover + .ant-menu-item,
+    .ant-menu > .ant-menu-item:hover + .ant-menu-submenu > .ant-menu-submenu-title,
+    .ant-menu > .ant-menu-submenu:hover + .ant-menu-item,
+    .ant-menu > .ant-menu-submenu:hover + .ant-menu-submenu > .ant-menu-submenu-title {
+      --framework-dock-ty: -@framework-dock-menu-lift-near;
+      --framework-dock-scale: @framework-dock-menu-scale-near;
+      z-index: 1;
+    }
+
+    // prev sibling（hover 左侧/上方一项）
+    .ant-menu > .ant-menu-item:has(+ .ant-menu-item:hover),
+    .ant-menu > .ant-menu-item:has(+ .ant-menu-submenu:hover) {
+      --framework-dock-ty: -@framework-dock-menu-lift-near;
+      --framework-dock-scale: @framework-dock-menu-scale-near;
+      z-index: 1;
+    }
+
+    .ant-menu > .ant-menu-submenu:has(+ .ant-menu-item:hover) > .ant-menu-submenu-title,
+    .ant-menu > .ant-menu-submenu:has(+ .ant-menu-submenu:hover) > .ant-menu-submenu-title {
+      --framework-dock-ty: -@framework-dock-menu-lift-near;
+      --framework-dock-scale: @framework-dock-menu-scale-near;
+      z-index: 1;
+    }
+  }
+}

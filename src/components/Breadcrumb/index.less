@@ -1,0 +1,23 @@
+@import (reference) '../../styles/tokens.less';
+
+.breadcrumb-container {
+  padding: 0 @framework-space-lg;
+  line-height: 50px;
+
+  .ant-breadcrumb {
+    font-size: 14px;
+
+    a {
+      color: @framework-color-text-tertiary;
+      transition: color 0.3s;
+
+      &:hover {
+        color: @framework-color-primary;
+      }
+    }
+
+    .ant-breadcrumb-separator {
+      color: @framework-color-text-tertiary;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+@import (reference) '../../styles/tokens.less';
+
+.fullscreen-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-right: 8px;
+  border-radius: @framework-radius-md;
+  color: @framework-color-text-secondary;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: @framework-glass-control-bg;
+  border: 1px solid @framework-glass-control-border;
+  box-shadow: @framework-glass-control-shadow;
+  backdrop-filter: @framework-glass-control-filter;
+  -webkit-backdrop-filter: @framework-glass-control-filter;
+
+  &:hover {
+    color: @framework-color-primary;
+    background-color: @framework-glass-control-bg-hover;
+    transform: translate3d(0, -1px, 0);
+  }
+
+  &:focus {
+    color: @framework-color-primary;
+  }
+}

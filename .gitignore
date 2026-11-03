@@ -1,0 +1,21 @@
+node_modules/
+dist/
+src/.umi*/
+.env.local
+.env.*.local
+coverage/
+.DS_Store
+
+# Local configuration, logs and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.mobileprovision
+*.jks
+*.keystore
+*.log
+.idea/

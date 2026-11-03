@@ -1,0 +1,109 @@
+/**
+ * @file src/components/LayoutSettingsDrawer/index.less
+ * @description 布局设置抽屉样式：复用项目的玻璃拟态浮层 token，保持与现有 Header/Drawer 的视觉语义一致。
+ */
+
+@import (reference) '../../styles/tokens.less';
+
+.layout-settings-drawer {
+  .ant-drawer-mask {
+    background: @framework-glass-float-mask;
+    backdrop-filter: @framework-glass-float-mask-filter;
+    -webkit-backdrop-filter: @framework-glass-float-mask-filter;
+  }
+
+  .ant-drawer-content {
+    background: @framework-glass-fallback-bg;
+    background-image: @framework-glass-float-overlay;
+    backdrop-filter: @framework-glass-float-filter;
+    -webkit-backdrop-filter: @framework-glass-float-filter;
+    border-left: 1px solid @framework-glass-float-border;
+    box-shadow: @framework-glass-float-shadow;
+  }
+
+  .ant-drawer-header {
+    padding: @framework-space-lg @framework-space-xl;
+    background: transparent;
+    border-bottom: 1px solid @framework-glass-float-border-inner;
+  }
+
+  .ant-drawer-title {
+    color: @framework-color-text-primary;
+    font-weight: 600;
+  }
+
+  .ant-drawer-body {
+    padding: @framework-space-xl;
+  }
+
+  .ant-drawer-footer {
+    padding: @framework-space-md @framework-space-xl;
+    background: transparent;
+    border-top: 1px solid @framework-glass-float-border-inner;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: @framework-space-lg;
+  }
+
+  &__intro {
+    padding: @framework-space-lg;
+    border-radius: @framework-radius-lg;
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    box-shadow: @framework-shadow-sm;
+  }
+
+  &__intro-title {
+    margin: 0 0 @framework-space-xs;
+    color: @framework-color-text-primary;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &__intro-description {
+    margin: 0;
+    color: @framework-color-text-secondary;
+    line-height: 1.6;
+  }
+
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: @framework-space-lg;
+    padding: @framework-space-lg;
+    border-radius: @framework-radius-lg;
+    background: rgba(255, 255, 255, 0.54);
+    border: 1px solid rgba(255, 255, 255, 0.68);
+    box-shadow: @framework-shadow-sm;
+  }
+
+  &__item-main {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    gap: @framework-space-xs;
+  }
+
+  &__item-title {
+    color: @framework-color-text-primary;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  &__item-description {
+    color: @framework-color-text-secondary;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
