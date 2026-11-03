@@ -3,6 +3,7 @@
  * @description ProTable 内置搜索表单：支持常用字段首行展示、Top Drawer 高级搜索、Enter 快捷搜索等。
  */
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useEventListener, useSize } from 'ahooks';
 import { Form, Button, Row, Col, Space, Input, Select, DatePicker } from 'antd';
 import { SearchOutlined, ReloadOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
 import {
@@ -44,8 +45,13 @@ const SearchForm = ({
   loading = false,
 }) => {
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const [fieldBudget, setFieldBudget] = useState(maxVisibleSpan);
   const containerRef = useRef(null);
+  const containerSize = useSize(containerRef);
+  const [viewportHeight, setViewportHeight] = useState(() => globalThis.innerHeight ?? Infinity);
+  useEventListener('resize', () => setViewportHeight(window.innerHeight));
+  // 容器宽度与短视口共同决定首行预算；弹窗内使用时不能只看 window 宽度。
+  const compact = (containerSize?.width ?? Infinity) < 900 || viewportHeight < 500;
+  const fieldBudget = compact ? Math.min(6, maxVisibleSpan) : maxVisibleSpan;
   const [validating, setValidating] = useState(false);
   const [error, setError] = useState('');
   const gate = useRef(createTaskGate());
@@ -64,20 +70,6 @@ const SearchForm = ({
     setDrawerVisible(false);
   };
   const busy = loading || validating;
-  useEffect(() => {
-    const element = containerRef.current;
-    if (!element) return undefined;
-    const resize = () =>
-      setFieldBudget(element.clientWidth < 900 || innerHeight < 500 ? Math.min(6, maxVisibleSpan) : maxVisibleSpan);
-    const observer = new ResizeObserver(resize);
-    observer.observe(element);
-    window.addEventListener('resize', resize);
-    resize();
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', resize);
-    };
-  }, [maxVisibleSpan]);
   const containerClassName = getSearchFormContainerClassName(variant);
   // 注意：form 应该由父组件通过 ProTable 传入，这里不创建 defaultForm
   // 以避免出现 "Instance created by useForm is not connected to any Form element" 警告

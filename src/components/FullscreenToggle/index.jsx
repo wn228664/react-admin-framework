@@ -4,7 +4,8 @@
  * @example
  * <FullscreenToggle />
  */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useEventListener } from 'ahooks';
 import { Button, Tooltip } from 'antd';
 import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons';
 import {
@@ -19,31 +20,12 @@ import './index.less';
  * @returns {JSX.Element} 全屏切换按钮。
  */
 const FullscreenToggle = () => {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') {
-      return undefined;
-    }
-
-    /**
-     * 同步浏览器全屏状态，兼容标准属性与历史浏览器前缀字段。
-     * @returns {void}
-     */
-    const handleFullscreenChange = () => {
-      setIsFullscreen(isFullscreenActive(document));
-    };
-
-    FULLSCREEN_CHANGE_EVENTS.forEach((eventName) => {
-      document.addEventListener(eventName, handleFullscreenChange);
-    });
-
-    return () => {
-      FULLSCREEN_CHANGE_EVENTS.forEach((eventName) => {
-        document.removeEventListener(eventName, handleFullscreenChange);
-      });
-    };
-  }, []);
+  const [isFullscreen, setIsFullscreen] = useState(() => isFullscreenActive(globalThis.document));
+  useEventListener(
+    FULLSCREEN_CHANGE_EVENTS,
+    () => setIsFullscreen(isFullscreenActive(globalThis.document)),
+    { target: () => globalThis.document }
+  );
 
   /**
    * 切换浏览器全屏状态，保持标准 API 优先、前缀 API 回退的既有兼容策略。

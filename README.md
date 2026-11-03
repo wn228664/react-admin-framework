@@ -76,6 +76,10 @@ cp .env.example .env.local
 
 框架默认没有登录页或完整认证流程。可通过 `user/setAccess` 注入角色和权限，使用 `Authorized` 控制展示；受保护路由与后端鉴权仍需按实际应用实现。认证请求只应通过受信任的 API 实例发往受控服务，业务组件不要把 token 拼入任意外链。
 
+## ahooks 的使用
+
+当前锁定 ahooks 3.9.7：ProTable 使用 useAntdTable，搜索容器使用 useSize，全局搜索、全屏与短视口监听使用 useEventListener。更多适用 API、取消语义、KeepAlive 和状态边界见 [ahooks 接入与使用指南](docs/AHOOKS.md)。
+
 ## 页面和组件怎么使用
 
 新增页面后，在 `src/config/routes.js` 的 `menuRoutes` 注册路由，设置 `meta.title`；`meta.affix` 固定标签，`meta.noCache` 关闭该页缓存。动态替换菜单可使用 `menu/setRoutes`。

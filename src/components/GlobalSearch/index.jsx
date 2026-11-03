@@ -5,6 +5,7 @@
  * <GlobalSearch routes={menu.routes} />
  */
 import React, { useEffect, useMemo, useState } from 'react';
+import { useEventListener } from 'ahooks';
 import { Button, Empty, Input, List, Tooltip } from 'antd';
 import { RightOutlined, SearchOutlined } from '@ant-design/icons';
 import { history } from 'umi';
@@ -85,30 +86,15 @@ const GlobalSearch = ({ routes = [] }) => {
     }
   };
 
-  useEffect(() => {
-    if (typeof document === 'undefined') {
-      return undefined;
-    }
-
-    /**
-     * 处理全局 `Ctrl/Cmd + K` 快捷键，保持任意页面都能拉起搜索弹窗。
-     * @param {KeyboardEvent} event 全局键盘事件。
-     * @returns {void}
-     */
-    const handleGlobalKeyDown = (event) => {
-      if (!isGlobalSearchShortcut(event)) {
-        return;
-      }
-
+  useEventListener(
+    'keydown',
+    (event) => {
+      if (!isGlobalSearchShortcut(event)) return;
       event.preventDefault();
       openSearch();
-    };
-
-    document.addEventListener('keydown', handleGlobalKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleGlobalKeyDown);
-    };
-  }, []);
+    },
+    { target: () => globalThis.document }
+  );
 
   return (
     <>
