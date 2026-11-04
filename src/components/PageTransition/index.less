@@ -1,3 +1,7 @@
+/*
+ * 模块职责：使用 opacity/transform 呈现路由内容过渡，不改变接口、路由或缓存身份。
+ * 外壳继承父级高度；动画结束不代表页面数据加载完成，不能替代显式 loading/error 状态。
+ */
 .page-transition {
   width: 100%;
   height: 100%;
@@ -34,3 +38,5 @@
     transform: translateY(-10px);
   }
 }
+
+// ───── 模块结束：src/components/PageTransition/index.less ─────

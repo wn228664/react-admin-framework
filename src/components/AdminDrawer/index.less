@@ -1,3 +1,7 @@
+/*
+ * 模块职责：限制抽屉在视口之内，固定 header/footer，只让 body 在剩余高度内滚动。
+ * 保留 Antd 关闭态 display:none；不得通过根节点强制 display:flex 让关闭抽屉重新覆盖页面。
+ */
 .admin-drawer .ant-drawer-content-wrapper {
   max-width: 100vw;
   max-height: 100dvh;
@@ -20,3 +24,5 @@
   overscroll-behavior: contain;
   overflow-wrap: anywhere;
 }
+
+// ───── 模块结束：src/components/AdminDrawer/index.less ─────

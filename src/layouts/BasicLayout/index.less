@@ -1,3 +1,7 @@
+/*
+ * 模块职责：将侧栏、顶栏、页签和内容区分配到同一个可视高度，不让页面内容撑开 body。
+ * 导航自身滚动，主内容把剩余空间交给页面；窄屏/短屏只压缩留白，不能裁掉操作入口。
+ */
 .framework-layout {
   height: 100dvh;
   min-height: 0;
@@ -26,6 +30,8 @@
   font-size: 1.125rem;
   font-weight: 600;
   overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
 }
 .framework-header {
   flex: none;
@@ -62,3 +68,5 @@
     line-height: 48px;
   }
 }
+
+// ───── 模块结束：src/layouts/BasicLayout/index.less ─────

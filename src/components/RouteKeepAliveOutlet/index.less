@@ -1,3 +1,7 @@
+/*
+ * 模块职责：让缓存出口和页面实例继承父级剩余高度，只显示当前活动页面。
+ * inactive 使用隐藏而非销毁；页面专属监听/计时器仍须由页面生命周期 owner 清理或停用。
+ */
 /* 每一层都传递可收缩的剩余高度；inactive 页仍保留实例，但不参与布局。 */
 .route-keep-alive-outlet,
 .route-keep-alive-entry,
@@ -10,3 +14,5 @@
 .route-keep-alive-entry.inactive {
   display: none;
 }
+
+// ───── 模块结束：src/components/RouteKeepAliveOutlet/index.less ─────

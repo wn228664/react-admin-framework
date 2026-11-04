@@ -1,3 +1,7 @@
+/*
+ * 模块职责：提供覆盖视口的等待遮罩、图标动画和提示文字布局。
+ * 固定定位只属于全局遮罩；是否显示和何时结束由父级任务 owner 决定，CSS 不推断业务进度。
+ */
 .loading-container {
   position: fixed;
   top: 0;
@@ -99,3 +103,5 @@
     color: #fff;
   }
 }
+
+// ───── 模块结束：src/components/Loading/index.less ─────

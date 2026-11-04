@@ -31,9 +31,10 @@ npm run dev
 
 ```sh
 npm run lint          # ESLint，禁止 warning
+npm run format:check  # 源码、测试、样式和配置格式
 npm test              # Jest 回归
 npm run build         # 生产构建，输出 dist/
-npm run verify        # lint → test → build
+npm run verify        # lint → format:check → test → build
 npm run build:staging # 使用 staging 配置构建
 ```
 
@@ -44,7 +45,7 @@ npm run build:staging # 使用 staging 配置构建
 | 应用入口 | Antd 上下文、主题、语言、错误边界、消息/弹窗上下文、路由进度 |
 | 导航与布局 | 响应式侧栏、菜单搜索、面包屑、全屏、布局设置、访问标签、固定标签、关闭/刷新、页面实例缓存 |
 | 状态与访问 | Dva model、菜单配置、角色/权限数据注入、Authorized 展示控制 |
-| 网络 | Axios 实例、30 秒默认超时、Bearer 注入、HTTP 错误拒绝、当前凭证的 401 清理、signal 取消 |
+| 网络 | 固定 API 来源的 Axios 实例、30 秒默认超时、Bearer 注入、会话切换后拒绝旧结果、当前会话 401 清理、signal 取消 |
 | 列表与查询 | ProTable 分页/排序/自动高度/重试，SearchForm 校验、防重、响应式高级搜索 |
 | 表单与弹层 | PageContainer、ScrollPanel、AdminModal、AdminDrawer，固定标题/底部与正文内部滚动 |
 | 文件与内容 | UploadFile 类型/数量/大小校验、图片压缩、进度、回填、预览、移除/取消；RichTextEditor 图片回调 |
@@ -84,7 +85,9 @@ cp .env.example .env.local
 
 修改环境后重新启动开发服务；部署产物需要重新构建。前端配置会进入浏览器代码，服务密钥应由服务端保管。
 
-新增服务时在新项目中组织独立服务模块，调用 `src/utils/request.js`，自行解释服务端响应、校验业务成功与映射错误。失败应 reject，不要将失败转为空列表或伪造成功。新页面可通过 Axios `signal` 取消请求；当前封装的旧 401 防护不等于所有异步任务均已取消。
+新增服务时在新项目中组织独立服务模块，调用 `src/utils/request.js`，自行解释服务端响应、校验业务成功与映射错误。失败应 reject，不要将失败转为空列表或伪造成功。认证请求使用固定 API 基址下的相对路径，禁止单次替换 `baseURL`。调用 `setToken/removeToken` 会推进会话代次，旧会话的成功和失败都以 `SESSION_CHANGED` 拒绝。新页面可通过 Axios `signal` 取消请求；忽略旧响应不等于底层传输已经取消。
+
+访问明确的公开外部资源时显式设置 `authenticated: false`。该模式不自动附加应用 Bearer，不处理当前登录态的 401；调用方显式设置的 headers、浏览器 Cookie 与跨来源规则仍由调用方负责。完整契约见 [通用封装使用规范](docs/COMMON_COMPONENTS.md#请求与会话)。
 
 框架默认没有登录页或完整认证流程。可通过 `user/setAccess` 注入角色和权限，使用 `Authorized` 控制展示；受保护路由与后端鉴权仍需按实际应用实现。认证请求只应通过受信任的 API 实例发往受控服务，业务组件不要把 token 拼入任意外链。
 
@@ -155,7 +158,9 @@ API 转发、HTTPS、访问控制由部署环境配置。部署在子路径时�
 
 ## 验证记录与常见问题
 
-2026-11-02 的框架验收：ESLint 零警告，15 个测试套件 / 73 项测试通过，生产构建成功；浏览器检查过桌面、平板、窄屏、横屏及表格/搜索/弹层滚动边界。这是通用框架验证，接入真实后端后仍需验证新接口与权限。
+注释与代码质量标准、逐层维护要求见 [代码与注释规范](docs/CODE_QUALITY.md)。本次复核覆盖源码、样式与可注释配置，验证范围和环境限制见 [验证记录](docs/VALIDATION.md)。这些是通用框架的本地验证；接入真实后端后仍需验证新接口与权限。
+
+2026-11-04 本地复核：`npm run verify` 通过 ESLint、格式检查、29 个测试套件中的 113 项测试和生产构建。源码保留逐项中文注释，说明公开契约、参数、异步状态和资源清理；本次浏览器交互证据沿用此前批次，不代表已验收未来接入的真实服务。
 
 - **上传按钮不可用**：检查是否配置 uploadUrl 或 customRequest；框架不会猜测上传接口。
 - **刷新子路由出现 404**：静态服务器缺少 history 回退。

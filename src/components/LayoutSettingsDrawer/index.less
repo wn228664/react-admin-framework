@@ -1,8 +1,8 @@
-/**
- * @file src/components/LayoutSettingsDrawer/index.less
- * @description 布局设置抽屉样式：复用项目的玻璃拟态浮层 token，保持与现有 Header/Drawer 的视觉语义一致。
+/*
+ * 模块职责：组织设置抽屉的说明、开关与固定完成操作，保持长描述可读。
+ * 颜色和间距复用 token；正文滚动继承 AdminDrawer，不单独放开 portal 或页面滚动。
  */
-
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .layout-settings-drawer {
@@ -107,3 +107,5 @@
     justify-content: flex-end;
   }
 }
+
+// ───── 模块结束：src/components/LayoutSettingsDrawer/index.less ─────

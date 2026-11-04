@@ -1,3 +1,8 @@
+/*
+ * 模块职责：展示侧栏层级、激活态和局部指针动效，语义颜色从统一 token 取得。
+ * 动效只写局部 CSS 变量；菜单滚动 owner 在布局导航区，不能用动效位移代替真实显露。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .sidebar-menu {
@@ -18,7 +23,9 @@
 
   .ant-menu-item,
   .ant-menu-submenu-title {
+    // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
     --framework-dock-ty: 0px;
+    // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
     --framework-dock-scale: 1;
     position: relative;
     overflow: hidden;
@@ -55,7 +62,9 @@
 
   .ant-menu-item:hover,
   .ant-menu-submenu-title:hover {
+    // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
     --framework-dock-ty: -@framework-dock-menu-lift-hover;
+    // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
     --framework-dock-scale: @framework-dock-menu-scale-hover;
     background: @framework-glass-menu-item-bg-hover;
     border-color: @framework-glass-menu-item-border-hover;
@@ -95,7 +104,9 @@
   }
 
   .ant-menu-item-selected {
+    // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
     --framework-dock-ty: -@framework-dock-menu-lift-far;
+    // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
     --framework-dock-scale: @framework-dock-menu-scale-far;
     background: @framework-glass-menu-item-bg-selected !important;
     border-color: @framework-glass-menu-item-border-selected !important;
@@ -106,7 +117,9 @@
   }
 
   .ant-menu-item-selected:hover {
+    // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
     --framework-dock-ty: -@framework-dock-menu-lift-hover;
+    // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
     --framework-dock-scale: @framework-dock-menu-scale-hover;
     z-index: 2;
   }
@@ -166,7 +179,9 @@
     .ant-menu > .ant-menu-item:hover + .ant-menu-submenu > .ant-menu-submenu-title,
     .ant-menu > .ant-menu-submenu:hover + .ant-menu-item,
     .ant-menu > .ant-menu-submenu:hover + .ant-menu-submenu > .ant-menu-submenu-title {
+      // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
       --framework-dock-ty: -@framework-dock-menu-lift-near;
+      // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
       --framework-dock-scale: @framework-dock-menu-scale-near;
       z-index: 1;
     }
@@ -174,16 +189,31 @@
     // prev sibling（hover 左侧/上方一项）
     .ant-menu > .ant-menu-item:has(+ .ant-menu-item:hover),
     .ant-menu > .ant-menu-item:has(+ .ant-menu-submenu:hover) {
+      // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
       --framework-dock-ty: -@framework-dock-menu-lift-near;
+      // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
       --framework-dock-scale: @framework-dock-menu-scale-near;
       z-index: 1;
     }
 
     .ant-menu > .ant-menu-submenu:has(+ .ant-menu-item:hover) > .ant-menu-submenu-title,
     .ant-menu > .ant-menu-submenu:has(+ .ant-menu-submenu:hover) > .ant-menu-submenu-title {
+      // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
       --framework-dock-ty: -@framework-dock-menu-lift-near;
+      // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
       --framework-dock-scale: @framework-dock-menu-scale-near;
       z-index: 1;
     }
   }
 }
+
+// 仅抑制局部 Dock 位移，保留页面过渡生命周期与正常组件滚动。
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-menu .ant-menu-item,
+  .sidebar-menu .ant-menu-submenu-title {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+// ───── 模块结束：src/components/SidebarMenu/index.less ─────

@@ -1,3 +1,7 @@
+/*
+ * 模块职责：为本地组件验证页约束长表单宽度和浮层内表格高度。
+ * overlay-table 的高度随可视区夹取，内部 ProTable 仍负责正文滚动；验证页不声明业务布局。
+ */
 .component-form {
   width: 100%;
 }
@@ -5,3 +9,5 @@
   height: min(60dvh, 28rem);
   min-height: 0;
 }
+
+// ───── 模块结束：src/pages/Components/index.less ─────

@@ -1,4 +1,9 @@
+/*
+ * 模块职责：提供文件卡片、拖拽区域、进度、媒体操作和可选外观变体的组件内布局。
+ * 上传框宽高来自 CSS 变量；预览正文另由 AdminModal 限制，不能用上传列表改变文档根滚动。
+ */
 // 通用文件上传组件样式
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .upload-file-wrapper {
@@ -556,3 +561,5 @@
     }
   }
 }
+
+// ───── 模块结束：src/components/UploadFile/index.less ─────

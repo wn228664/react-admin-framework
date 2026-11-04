@@ -1,3 +1,7 @@
+/*
+ * 模块职责：约束富文本编辑器外壳与工具栏边界，保持编辑区与父级 ScrollPanel 协作。
+ * 编辑器自己的正文高度由组件 props 指定，页面滚动仍由有界内容容器控制。
+ */
 .rich-text-editor-wrapper {
   border: 1px solid #d9d9d9;
   min-width: 0;
@@ -5,3 +9,5 @@
 .rich-text-editor-wrapper .w-e-toolbar {
   border-bottom: 1px solid #d9d9d9;
 }
+
+// ───── 模块结束：src/components/RichTextEditor/index.less ─────

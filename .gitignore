@@ -1,3 +1,4 @@
+# 隔离依赖、构建缓存、本机环境和签名材料；仅保留不含秘密的 .env.example。
 node_modules/
 dist/
 src/.umi*/

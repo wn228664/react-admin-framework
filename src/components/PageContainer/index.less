@@ -1,3 +1,7 @@
+/*
+ * 模块职责：为页面标题与主要组件分配有界高度，标题区按内容折行但不随正文滚动。
+ * 正文 flex:1/min-height:0 只传递剩余空间，真正溢出必须由其子组件处理。
+ */
 .page-container {
   height: 100%;
   min-height: 0;
@@ -27,3 +31,5 @@
   min-width: 0;
   overflow: hidden;
 }
+
+// ───── 模块结束：src/components/PageContainer/index.less ─────

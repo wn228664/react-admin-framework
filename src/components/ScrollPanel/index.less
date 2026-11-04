@@ -1,3 +1,7 @@
+/*
+ * 模块职责：让 Card 标题固定、body 消耗剩余高度并拥有纵横向滚动。
+ * 高度、min-height:0 与 overflow 的约束需一起保留，否则长表单会撑开后台页面。
+ */
 .scroll-panel.ant-card {
   flex: 1;
   height: 100%;
@@ -17,3 +21,5 @@
   overscroll-behavior: contain;
   overflow-wrap: anywhere;
 }
+
+// ───── 模块结束：src/components/ScrollPanel/index.less ─────

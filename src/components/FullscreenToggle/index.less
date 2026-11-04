@@ -1,3 +1,8 @@
+/*
+ * 模块职责：统一全屏按钮的命中区域、过渡和悬停反馈。
+ * 视觉状态跟随浏览器全屏事件，CSS 不模拟已经进入全屏，也不改变页面滚动约束。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .fullscreen-toggle {
@@ -29,3 +34,5 @@
     color: @framework-color-primary;
   }
 }
+
+// ───── 模块结束：src/components/FullscreenToggle/index.less ─────

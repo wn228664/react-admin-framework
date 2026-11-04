@@ -1,3 +1,8 @@
+/*
+ * 模块职责：为搜索、标题、表头、正文和分页建立连续的有界 flex 高度链。
+ * 仅 .ant-table-body 双向滚动，分页和工具区保留；横向滚动条不能被外壳隐藏成不可触达。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .pro-table-container {
@@ -131,8 +136,7 @@
 
     .ant-table-body {
       flex: 1;
-      // 允许横向/纵向滚动：
-      // 之前仅设置 overflow-y 会导致 scroll.x 的横向滚动条失效（表格宽度超出但无法左右滚动）
+      // 同一正文承接两个方向，宽表格的横向滚动条必须位于可见正文底部。
       overflow: auto !important;
       overscroll-behavior: contain;
       // 让滚动条在需要时更“可见”（避免在部分系统/浏览器里过度自动隐藏）
@@ -166,6 +170,7 @@
 
     .ant-pagination {
       margin-top: @framework-space-md;
+      margin-bottom: 0;
       flex-shrink: 0; // 分页器不收缩，确保始终可见
       padding: 0;
       position: relative; // 确保分页器在正常文档流中
@@ -176,7 +181,7 @@
 
 @media (max-height: 500px) {
   .pro-table-container .pro-table-card.ant-card .ant-card-body {
-    padding: 0.5rem;
+    padding: 0.25rem;
   }
   .pro-table-container .pro-table-title {
     display: none;
@@ -186,10 +191,10 @@
   }
 }
 
-.pro-table-container .ant-pagination {
-  margin-bottom: 0;
-}
 @media (max-height: 500px) {
+  .pro-table-container .ant-table-wrapper .ant-pagination {
+    margin-top: 0.25rem;
+  }
   .pro-table-container .search-form-container {
     margin-bottom: 0.25rem;
   }
@@ -197,4 +202,18 @@
     padding-top: 0.375rem;
     padding-bottom: 0.375rem;
   }
+  // 短窗口减少行留白，保留可操作正文；仍由表格 body 自身滚动。
+  .pro-table-container .ant-table-tbody > tr > td {
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+  }
 }
+
+@media (max-height: 500px) and (max-width: 500px) {
+  // 极短且窄时总数会独占一行，把正文挤至 0；只折叠统计文案，页码和翻页入口保留。
+  .pro-table-container .ant-pagination-total-text {
+    display: none;
+  }
+}
+
+// ───── 模块结束：src/components/ProTable/index.less ─────

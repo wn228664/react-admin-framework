@@ -1,14 +1,22 @@
+/*
+ * 模块职责：为图标筛选提供有界网格、选中反馈和弹层宽度。
+ * 大量图标在图标列表内滚动；输入和分组仍可到达，不能靠整个页面滚动展示结果。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .icon-select-content {
-  width: 500px;
-  max-height: 400px;
+  // 图标单元维持可点击尺寸，面板只压缩自身宽高；窄屏与短视口由内部列表承接滚动。
+  // 原生 min/max 必须交给浏览器；LESS 同名函数会把混合视口单位提前折叠成固定尺寸。
+  width: ~'min(31.25rem, calc(100vw - 4rem))';
+  max-height: calc(100dvh - 4rem);
+  overflow-y: auto;
 
   .icon-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     gap: 8px;
-    max-height: 300px;
+    max-height: ~'min(18.75rem, max(4rem, calc(100dvh - 12rem)))';
     overflow-y: auto;
     padding: 8px;
 
@@ -18,6 +26,10 @@
       justify-content: center;
       width: 50px;
       height: 50px;
+      padding: 0;
+      color: inherit;
+      background: transparent;
+      font: inherit;
       border: 1px solid @framework-color-border-strong;
       border-radius: 4px;
       cursor: pointer;
@@ -29,6 +41,11 @@
         transform: scale(1.1);
       }
 
+      &:focus-visible {
+        outline: 2px solid @framework-color-primary;
+        outline-offset: 2px;
+      }
+
       &.active {
         border-color: @framework-color-primary;
         background: @framework-color-primary-bg;
@@ -38,8 +55,27 @@
   }
 }
 
-.icon-select-popover {
-  .ant-popover-inner-content {
-    padding: 16px;
+.icon-select-clear {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-select-content .icon-item {
+    transition: none !important;
+    transform: none !important;
   }
 }
+
+.icon-select-popover {
+  .ant-popover-inner {
+    padding: 16px;
+  }
+
+  .ant-popover-inner-content {
+    // Antd 5 的 inner 已持有边距；重复加给 inner-content 会使窄屏面板超出视口。
+    padding: 0;
+  }
+}
+
+// ───── 模块结束：src/components/IconSelect/index.less ─────

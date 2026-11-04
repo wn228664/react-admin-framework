@@ -1,224 +1,378 @@
-/**
- * @file src/styles/tokens.less
- * @description UI 设计 Token（颜色/圆角/阴影/间距）。用于在 less 中复用，避免散落硬编码导致风格不一致。
+/*
+ * 模块职责：提供 LESS 侧颜色、间距、圆角、阴影和材质变量，供组件以 reference 方式消费。
+ * 像素变量表示局部尺寸基准，比例表示动效强度；与 tokens.js 同名语义同步，不能代替流式布局。
  */
-
 // ========= Colors =========
 
+// `@framework-color-primary`：框架交互主色，链接、主按钮和选中提示共用；与 JS 主题的 primary 保持一致。
 @framework-color-primary: #1890ff;
+// `@framework-color-primary-hover`：主色交互的悬停强调层，帮助区分静态选中与指针反馈。
 @framework-color-primary-hover: #40a9ff;
 
+// `@framework-color-bg-layout`：后台固定外壳底色，与实体 surface 正文卡片形成层级。
 @framework-color-bg-layout: #f5f7fb;
+// `@framework-color-bg-layout-alt`：布局渐变/分层的第二底色，供大面积外壳组合，不充当正文文字色。
 @framework-color-bg-layout-alt: #f0f2f5;
+// `@framework-color-surface`：可读正文与实体控件的白色表面，隔离底层玻璃叠色。
 @framework-color-surface: #ffffff;
+// `@framework-color-surface-muted`：表头或次级实体表面底色，用轻微层级区分正文。
 @framework-color-surface-muted: #fafafa;
+// `@framework-color-bg-muted`：低强调的中性区域背景，适合提示或占位区域。
 @framework-color-bg-muted: #f5f5f5;
+// `@framework-color-bg-subtle`：比实体表面更深的轻背景预设，组合时需维持文字对比度。
 @framework-color-bg-subtle: #f2f2f2;
+// `@framework-color-border`：默认弱边界色，用于相邻表面分隔，避免所有容器都出现重边框。
 @framework-color-border: #f0f0f0;
+// `@framework-color-border-strong`：需要明确识别的控件边界，和较浅内容分隔色分开。
 @framework-color-border-strong: #d9d9d9;
+// `@framework-color-border-muted`：次级边界预设，供弱交互或装饰线按需使用。
 @framework-color-border-muted: #ccc;
+// `@framework-color-border-light`：浅灰边界预设，组合背景时需核对可见性。
 @framework-color-border-light: #ddd;
 
+// `@framework-color-text-primary`：主正文/标题的高强调文字色，关键信息优先使用。
 @framework-color-text-primary: #333;
+// `@framework-color-text-regular`：普通说明的次级文字色，保持与白色表面的可读对比。
 @framework-color-text-regular: #666;
+// `@framework-color-text-muted`：低强调说明色，适合非关键信息；小字号需单独核对对比度。
 @framework-color-text-muted: #999;
+// `@framework-color-text-secondary`：带透明度的第二层文字，最终对比随底色变化，使用前核对叠色。
 @framework-color-text-secondary: rgba(0, 0, 0, 0.65);
+// `@framework-color-text-tertiary`：带透明度的第三层提示文字，避免承担唯一的状态说明。
 @framework-color-text-tertiary: rgba(0, 0, 0, 0.45);
+// `@framework-color-mask`：普通遮罩底色，透明度表达背景退后，焦点与关闭行为仍由弹层组件负责。
 @framework-color-mask: rgba(0, 0, 0, 0.45);
+// `@framework-color-hover-bg`：极轻的中性悬停底色，保留原文字/图标的语义颜色。
 @framework-color-hover-bg: rgba(0, 0, 0, 0.025);
+// `@framework-color-primary-bg`：主色的浅背景层，用于选中态；需同时保留图标或文字提示。
 @framework-color-primary-bg: #e6f7ff;
 
 // ========= Radius =========
 
+// `@framework-radius-sm`：紧凑控件的 6px 圆角基准，与 JS radius.sm 同步。
 @framework-radius-sm: 6px;
+// `@framework-radius-md`：常规容器的 8px 圆角基准，不改变其实际滚动高度。
 @framework-radius-md: 8px;
+// `@framework-radius-lg`：较大容器的 10px 圆角基准，边缘裁切仍需由组件正确分配滚动区。
 @framework-radius-lg: 10px;
 
-// ========= Spacing (8px grid) =========
+// ========= Spacing (4px steps) =========
 
+// `@framework-space-xs`：最小 4px 间隔，用于紧凑内部留白，不代替触控命中区域。
 @framework-space-xs: 4px;
+// `@framework-space-sm`：小号 8px 间隔，供相邻轻量元素布局使用。
 @framework-space-sm: 8px;
+// `@framework-space-md`：中号 12px 间隔，与 JS space.md 对齐，按容器可用宽度收缩。
 @framework-space-md: 12px;
+// `@framework-space-lg`：常规 16px 内容间隔，用于表面内边距或布局间隙。
 @framework-space-lg: 16px;
+// `@framework-space-xl`：大号 24px 内容间隔，窄窗口应允许组件覆盖以保留可用正文。
 @framework-space-xl: 24px;
 
 // ========= Shadow =========
 
+// `@framework-shadow-sm`：轻表面投影，长度为 CSS px、颜色含透明度，只影响视觉分层。
 @framework-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+// `@framework-shadow-md`：中等容器投影预设，避免所有层都采用浮层重阴影。
 @framework-shadow-md: 0 6px 18px rgba(0, 0, 0, 0.06);
+// `@framework-shadow-header`：顶栏向内容区投射的轻阴影，不参与固定高度预算。
 @framework-shadow-header: 0 2px 10px rgba(0, 0, 0, 0.06);
+// `@framework-shadow-sider`：侧栏向右的边缘阴影，宽度和位置仍由布局外壳分配。
 @framework-shadow-sider: 2px 0 12px rgba(0, 0, 0, 0.18);
 
 // ========= Glass (Apple-like) =========
 // 说明：用于“毛玻璃/玻璃拟态”效果（半透明 + 模糊 + 轻边框），优先在 Layout/Sidebar 这类大容器使用。
 
+// `@framework-glass-sider-bg`：侧栏半透明基础表面，透出布局底色以区分实体正文。
 @framework-glass-sider-bg: rgba(255, 255, 255, 0.22);
+// `@framework-glass-sider-overlay`：侧栏从上至下的高光渐变，增强表面层次。
 @framework-glass-sider-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.16));
+// `@framework-glass-sider-border`：侧栏玻璃边界色，与背景叠色后仍需可见。
 @framework-glass-sider-border: rgba(255, 255, 255, 0.28);
+// `@framework-glass-sider-shadow`：侧栏横向投影预设，保持与弹窗投影的层级差异。
 @framework-glass-sider-shadow: 12px 0 40px rgba(0, 0, 0, 0.12);
+// `@framework-glass-sider-filter`：侧栏背景模糊/饱和度/亮度/对比度组合，依赖浏览器 backdrop-filter 支持。
 @framework-glass-sider-filter: blur(26px) saturate(180%) brightness(104%) contrast(1.04);
 
 // Menu Item（玻璃层次感：hover/selected 更明显）
+// `@framework-glass-menu-item-bg`：普通菜单项的半透明表面，保持标题与图标可读。
 @framework-glass-menu-item-bg: rgba(255, 255, 255, 0.14);
+// `@framework-glass-menu-item-bg-hover`：菜单项悬停表面，增强指针反馈而不改变选中身份。
 @framework-glass-menu-item-bg-hover: rgba(255, 255, 255, 0.22);
+// `@framework-glass-menu-item-bg-selected`：当前选中菜单的主色浅背景，与普通悬停区分。
 @framework-glass-menu-item-bg-selected: rgba(10, 132, 255, 0.16);
+// `@framework-glass-menu-item-border`：普通菜单项的轻边界，配合玻璃表面使用。
 @framework-glass-menu-item-border: rgba(255, 255, 255, 0.22);
+// `@framework-glass-menu-item-border-hover`：悬停菜单边界的较强高光。
 @framework-glass-menu-item-border-hover: rgba(255, 255, 255, 0.3);
+// `@framework-glass-menu-item-border-selected`：已选菜单的主色边界，不能成为唯一选中提示。
 @framework-glass-menu-item-border-selected: rgba(10, 132, 255, 0.38);
+// `@framework-glass-menu-item-shadow`：普通菜单项的轻投影，避免重阴影挤占视觉空间。
 @framework-glass-menu-item-shadow: 0 10px 24px -20px rgba(0, 0, 0, 0.18);
+// `@framework-glass-menu-item-shadow-hover`：悬停菜单的强调投影，只表达视觉提升。
 @framework-glass-menu-item-shadow-hover: 0 18px 34px -24px rgba(0, 0, 0, 0.22);
+// `@framework-glass-menu-item-shadow-selected`：已选菜单的稳定投影，与 active 字体/图标共同表达位置。
 @framework-glass-menu-item-shadow-selected: 0 22px 44px -28px rgba(0, 0, 0, 0.26);
+// `@framework-glass-menu-item-filter`：菜单项表面的模糊与饱和度预设，实际可读性需考虑底色。
 @framework-glass-menu-item-filter: blur(8px) saturate(140%);
 
+// `@framework-glass-menu-text`：普通菜单标题的深色透明文字，与侧栏半透明底组合后核对对比度。
 @framework-glass-menu-text: rgba(15, 23, 42, 0.78);
+// `@framework-glass-menu-text-strong`：活动/强调菜单标题的较高不透明度文字。
 @framework-glass-menu-text-strong: rgba(15, 23, 42, 0.92);
+// `@framework-glass-menu-icon`：普通菜单图标的弱强调颜色，操作名称由可见标题承载。
 @framework-glass-menu-icon: rgba(15, 23, 42, 0.56);
+// `@framework-glass-menu-icon-strong`：活动/强调菜单图标的更强颜色，和普通项形成层级。
 @framework-glass-menu-icon-strong: rgba(15, 23, 42, 0.78);
+// `@framework-glass-menu-accent`：选中菜单的主色强调，用于边缘/装饰以补充 active 状态。
 @framework-glass-menu-accent: rgba(10, 132, 255, 0.95);
 
 // Topbar（Header / TagsView）
+// `@framework-glass-topbar-bg`：固定顶栏与页签栏的半透明底层。
 @framework-glass-topbar-bg: rgba(255, 255, 255, 0.24);
+// `@framework-glass-topbar-overlay`：顶栏从上至下的高光渐变，分离正文与顶部区域。
 @framework-glass-topbar-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.12));
+// `@framework-glass-topbar-border`：顶栏玻璃边缘高光，避免和正文表格边界混为一层。
 @framework-glass-topbar-border: rgba(255, 255, 255, 0.58);
+// `@framework-glass-topbar-shadow`：顶栏向下的宽投影预设，不影响容器尺寸。
 @framework-glass-topbar-shadow: 0 18px 64px -36px rgba(0, 0, 0, 0.24);
+// `@framework-glass-topbar-filter`：顶栏背景模糊/饱和度，缺少平台支持时仍需实体底色保证可读。
 @framework-glass-topbar-filter: blur(24px) saturate(190%);
 
 // Topbar controls（折叠按钮/搜索/全屏/用户信息）
+// `@framework-glass-control-bg`：顶栏控制按钮的普通透明表面。
 @framework-glass-control-bg: rgba(255, 255, 255, 0.18);
+// `@framework-glass-control-bg-hover`：顶栏控制按钮的悬停强调层，操作忙碌/禁用另由组件状态控制。
 @framework-glass-control-bg-hover: rgba(255, 255, 255, 0.32);
+// `@framework-glass-control-border`：顶栏控制按钮的轻高光边界。
 @framework-glass-control-border: rgba(255, 255, 255, 0.56);
+// `@framework-glass-control-shadow`：顶栏控制按钮投影，帮助其从玻璃底层显露。
 @framework-glass-control-shadow: 0 20px 50px -32px rgba(0, 0, 0, 0.24);
+// `@framework-glass-control-filter`：顶栏控制按钮的背景模糊预设，不提供交互或焦点管理。
 @framework-glass-control-filter: blur(14px) saturate(175%);
 
 // TagsView chips（标签）
+// `@framework-glass-chip-bg`：普通访问标签的半透明背景。
 @framework-glass-chip-bg: rgba(255, 255, 255, 0.22);
+// `@framework-glass-chip-bg-hover`：访问标签悬停背景，和稳定活动态分开。
 @framework-glass-chip-bg-hover: rgba(255, 255, 255, 0.34);
+// `@framework-glass-chip-bg-active`：当前活动标签的主色浅底，配合 active 类的文字/边界展示。
 @framework-glass-chip-bg-active: rgba(10, 132, 255, 0.16);
+// `@framework-glass-chip-border`：普通标签的高光边界。
 @framework-glass-chip-border: rgba(255, 255, 255, 0.56);
+// `@framework-glass-chip-border-hover`：悬停标签更明显的边界高光。
 @framework-glass-chip-border-hover: rgba(255, 255, 255, 0.7);
+// `@framework-glass-chip-border-active`：活动标签的主色边界，保持与普通标签可区分。
 @framework-glass-chip-border-active: rgba(10, 132, 255, 0.34);
+// `@framework-glass-chip-shadow`：普通标签的外投影与内高光组合，长度为 CSS px。
 @framework-glass-chip-shadow:
   0 12px 28px -22px rgba(0, 0, 0, 0.18),
   inset 0 1px 0 rgba(255, 255, 255, 0.72);
+// `@framework-glass-chip-shadow-hover`：悬停标签的增强外投影与内高光。
 @framework-glass-chip-shadow-hover:
   0 18px 44px -26px rgba(0, 0, 0, 0.22),
   inset 0 1px 0 rgba(255, 255, 255, 0.82);
+// `@framework-glass-chip-shadow-active`：活动标签的稳定强调投影，效果不代表页面已加载完成。
 @framework-glass-chip-shadow-active:
   0 22px 56px -30px rgba(0, 0, 0, 0.26),
   inset 0 1px 0 rgba(255, 255, 255, 0.78);
+// `@framework-glass-chip-overlay`：普通标签的上下高光渐变。
 @framework-glass-chip-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.08));
+// `@framework-glass-chip-overlay-hover`：悬停标签的更亮高光渐变。
 @framework-glass-chip-overlay-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.1));
+// `@framework-glass-chip-overlay-active`：活动标签的主色高光渐变，配合实际选中状态使用。
 @framework-glass-chip-overlay-active: linear-gradient(180deg, rgba(10, 132, 255, 0.22), rgba(255, 255, 255, 0.06));
+// `@framework-glass-chip-filter`：标签背景模糊/饱和度，只影响视觉材质。
 @framework-glass-chip-filter: blur(14px) saturate(180%);
 
 // Dock-like magnify（起伏动效参数，尽量接近 macOS Dock 的“邻近放大”视觉）
+// `@framework-dock-ease`：缩放/抬升的缓动曲线，表达视觉过渡，不作为任务等待或取消机制。
 @framework-dock-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
 // TagsView / chips（横向 Dock）
+// `@framework-dock-chip-scale-hover`：横向访问标签直接悬停的基础缩放倍率（无单位）；CSS 状态提供回退，JS 指针距离变量可覆盖，仅改变 transform。
 @framework-dock-chip-scale-hover: 1.1;
+// `@framework-dock-chip-scale-near`：横向访问标签邻近一项的基础缩放倍率（无单位）；CSS 状态提供回退，JS 指针距离变量可覆盖，仅改变 transform。
 @framework-dock-chip-scale-near: 1.06;
+// `@framework-dock-chip-scale-far`：横向访问标签较远邻项/稳定活动项的基础缩放倍率（无单位）；CSS 状态提供回退，JS 指针距离变量可覆盖，仅改变 transform。
 @framework-dock-chip-scale-far: 1.03;
+// `@framework-dock-chip-lift-hover`：横向访问标签直接悬停的向上抬升量（CSS px）；应用时取负 Y，正文布局高度保持原值。
 @framework-dock-chip-lift-hover: 3px;
+// `@framework-dock-chip-lift-near`：横向访问标签邻近一项的向上抬升量（CSS px）；应用时取负 Y，正文布局高度保持原值。
 @framework-dock-chip-lift-near: 2px;
+// `@framework-dock-chip-lift-far`：横向访问标签较远邻项/稳定活动项的向上抬升量（CSS px）；应用时取负 Y，正文布局高度保持原值。
 @framework-dock-chip-lift-far: 1px;
 
 // Sidebar Menu（纵向 Dock，幅度更克制，避免拥挤）
+// `@framework-dock-menu-scale-hover`：纵向菜单直接悬停的基础缩放倍率（无单位）；CSS 状态提供回退，JS 指针距离变量可覆盖，仅改变 transform。
 @framework-dock-menu-scale-hover: 1.04;
+// `@framework-dock-menu-scale-near`：纵向菜单邻近一项的基础缩放倍率（无单位）；CSS 状态提供回退，JS 指针距离变量可覆盖，仅改变 transform。
 @framework-dock-menu-scale-near: 1.02;
+// `@framework-dock-menu-scale-far`：纵向菜单较远邻项/稳定活动项的基础缩放倍率（无单位）；CSS 状态提供回退，JS 指针距离变量可覆盖，仅改变 transform。
 @framework-dock-menu-scale-far: 1.01;
+// `@framework-dock-menu-lift-hover`：纵向菜单直接悬停的向上抬升量（CSS px）；应用时取负 Y，正文布局高度保持原值。
 @framework-dock-menu-lift-hover: 2px;
+// `@framework-dock-menu-lift-near`：纵向菜单邻近一项的向上抬升量（CSS px）；应用时取负 Y，正文布局高度保持原值。
 @framework-dock-menu-lift-near: 1px;
+// `@framework-dock-menu-lift-far`：纵向菜单较远邻项/稳定活动项的向上抬升量（CSS px）；应用时取负 Y，正文布局高度保持原值。
 @framework-dock-menu-lift-far: 0.5px;
 
 // ========= Glass Card (页面主体容器) =========
+// `@framework-glass-card-bg`：可选卡片半透明表面；正文默认实体背景由根主题覆盖。
 @framework-glass-card-bg: rgba(255, 255, 255, 0.72);
+// `@framework-glass-card-bg-hover`：可选卡片悬停表面预设，不能当作自动可点击状态。
 @framework-glass-card-bg-hover: rgba(255, 255, 255, 0.82);
+// `@framework-glass-card-border`：可选卡片玻璃高光边界。
 @framework-glass-card-border: rgba(255, 255, 255, 0.58);
+// `@framework-glass-card-shadow`：可选卡片的柔和投影，和浮层重阴影分开。
 @framework-glass-card-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.08);
+// `@framework-glass-card-filter`：可选卡片背景模糊与饱和度，接入时需保证文本对比。
 @framework-glass-card-filter: blur(20px) saturate(180%);
+// `@framework-glass-card-overlay`：可选卡片纵向高光渐变，不影响卡片高度。
 @framework-glass-card-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.12));
 
 // ========= Glass Float (弹层：Modal/Drawer/Popover/Dropdown/Tooltip) =========
+// `@framework-glass-float-bg`：可选浮层玻璃正文底色；默认实体弹层样式保持清晰。
 @framework-glass-float-bg: rgba(255, 255, 255, 0.78);
+// `@framework-glass-float-bg-header`：可选浮层固定标题区的较高不透明度底色。
 @framework-glass-float-bg-header: rgba(255, 255, 255, 0.82);
+// `@framework-glass-float-bg-footer`：可选浮层固定操作区的底色，与滚动正文分层。
 @framework-glass-float-bg-footer: rgba(255, 255, 255, 0.72);
+// `@framework-glass-float-border`：可选浮层外边界高光。
 @framework-glass-float-border: rgba(255, 255, 255, 0.62);
+// `@framework-glass-float-border-inner`：可选浮层内部区域分隔高光。
 @framework-glass-float-border-inner: rgba(255, 255, 255, 0.48);
+// `@framework-glass-float-shadow`：浮层与底层内容分离的较强投影预设。
 @framework-glass-float-shadow: 0 24px 80px -16px rgba(0, 0, 0, 0.18);
+// `@framework-glass-float-filter`：可选大型浮层的背景模糊/饱和度。
 @framework-glass-float-filter: blur(24px) saturate(190%);
+// `@framework-glass-float-filter-light`：可选轻浮层的较低模糊强度，减少过度透叠。
 @framework-glass-float-filter-light: blur(16px) saturate(180%);
+// `@framework-glass-float-overlay`：可选浮层从上至下的高光渐变。
 @framework-glass-float-overlay: linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.16));
+// `@framework-glass-float-mask`：浮层实际遮罩的暗色透明层，操作许可由 Modal/Drawer 管理。
 @framework-glass-float-mask: rgba(15, 23, 42, 0.32);
+// `@framework-glass-float-mask-filter`：可选遮罩背景模糊 4px，不承担焦点锁或交互阻断。
 @framework-glass-float-mask-filter: blur(4px);
 
 // Popover/Dropdown（轻量弹层）
+// `@framework-glass-popover-bg`：可选轻量弹出层玻璃背景，默认实体表面由全局样式提供。
 @framework-glass-popover-bg: rgba(255, 255, 255, 0.82);
+// `@framework-glass-popover-border`：可选轻量弹出层边界高光。
 @framework-glass-popover-border: rgba(255, 255, 255, 0.58);
+// `@framework-glass-popover-shadow`：Popover/Dropdown 轻投影预设，弱于大型确认浮层。
 @framework-glass-popover-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12);
 
 // Tooltip（深色玻璃）
+// `@framework-glass-tooltip-bg`：深色 Tooltip 表面预设，正文应使用对应浅色文字。
 @framework-glass-tooltip-bg: rgba(15, 23, 42, 0.85);
+// `@framework-glass-tooltip-filter`：Tooltip 可选背景模糊/饱和度，文字可读性优先于透明效果。
 @framework-glass-tooltip-filter: blur(8px) saturate(150%);
 
 // ========= Glass Control (Button/Input/Select 等控件) =========
+// `@framework-glass-input-bg`：可选输入控件普通玻璃表面。
 @framework-glass-input-bg: rgba(255, 255, 255, 0.68);
+// `@framework-glass-input-bg-hover`：输入控件悬停时更清晰的表面。
 @framework-glass-input-bg-hover: rgba(255, 255, 255, 0.82);
+// `@framework-glass-input-bg-focus`：输入焦点态接近实体的表面，帮助识别正在编辑的位置。
 @framework-glass-input-bg-focus: rgba(255, 255, 255, 0.92);
+// `@framework-glass-input-border`：输入控件普通边界。
 @framework-glass-input-border: rgba(0, 0, 0, 0.08);
+// `@framework-glass-input-border-hover`：输入控件悬停的主色边界。
 @framework-glass-input-border-hover: rgba(24, 144, 255, 0.32);
+// `@framework-glass-input-border-focus`：输入控件焦点主色边界，保留明确键盘焦点。
 @framework-glass-input-border-focus: rgba(24, 144, 255, 0.48);
+// `@framework-glass-input-shadow-focus`：输入焦点的外扩环预设，避免仅靠细边框表达焦点。
 @framework-glass-input-shadow-focus: 0 0 0 3px rgba(24, 144, 255, 0.12);
 
+// `@framework-glass-btn-bg`：可选普通按钮玻璃背景。
 @framework-glass-btn-bg: rgba(255, 255, 255, 0.72);
+// `@framework-glass-btn-bg-hover`：普通按钮悬停的较高不透明度背景。
 @framework-glass-btn-bg-hover: rgba(255, 255, 255, 0.88);
+// `@framework-glass-btn-border`：普通按钮的轻边界。
 @framework-glass-btn-border: rgba(0, 0, 0, 0.06);
+// `@framework-glass-btn-shadow`：普通按钮的轻投影。
 @framework-glass-btn-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+// `@framework-glass-btn-shadow-hover`：按钮悬停的增强投影。
 @framework-glass-btn-shadow-hover: 0 4px 16px -4px rgba(0, 0, 0, 0.12);
 
+// `@framework-glass-btn-primary-bg`：主按钮较高不透明度的主色表面。
 @framework-glass-btn-primary-bg: rgba(24, 144, 255, 0.88);
+// `@framework-glass-btn-primary-bg-hover`：主按钮悬停更实的主色背景。
 @framework-glass-btn-primary-bg-hover: rgba(24, 144, 255, 0.95);
+// `@framework-glass-btn-primary-shadow`：主按钮对应的主色柔和投影，只表达视觉强调。
 @framework-glass-btn-primary-shadow: 0 4px 16px -4px rgba(24, 144, 255, 0.4);
 
 // ========= Glass Pagination =========
+// `@framework-glass-pagination-item-bg`：分页按钮可选玻璃表面。
 @framework-glass-pagination-item-bg: rgba(255, 255, 255, 0.62);
+// `@framework-glass-pagination-item-bg-hover`：分页按钮悬停的较清晰表面。
 @framework-glass-pagination-item-bg-hover: rgba(255, 255, 255, 0.82);
+// `@framework-glass-pagination-item-bg-active`：当前页码的主色浅背景。
 @framework-glass-pagination-item-bg-active: rgba(24, 144, 255, 0.12);
+// `@framework-glass-pagination-item-border-active`：当前页码对应的主色边界，实际页码仍由分页状态决定。
 @framework-glass-pagination-item-border-active: rgba(24, 144, 255, 0.38);
 
 // ========= Glass Table (补充) =========
+// `@framework-glass-table-header-bg`：可选表头的弱透明浅底，固定表头应保持文字对比。
 @framework-glass-table-header-bg: rgba(250, 250, 250, 0.88);
+// `@framework-glass-table-row-hover-bg`：表格行悬停的极浅主色底。
 @framework-glass-table-row-hover-bg: rgba(24, 144, 255, 0.04);
+// `@framework-glass-table-row-selected-bg`：已选择行的主色浅底，选择逻辑仍由 rowSelection 持有。
 @framework-glass-table-row-selected-bg: rgba(24, 144, 255, 0.08);
+// `@framework-glass-table-row-selected-hover-bg`：已选择且被悬停行的叠加反馈底色，区别于普通 hover。
 @framework-glass-table-row-selected-hover-bg: rgba(24, 144, 255, 0.12);
 
 // ========= Glass Dropdown Item =========
+// `@framework-glass-dropdown-item-hover-bg`：下拉菜单当前悬停项的浅主色底。
 @framework-glass-dropdown-item-hover-bg: rgba(24, 144, 255, 0.08);
+// `@framework-glass-dropdown-item-selected-bg`：下拉菜单已选项的更强主色底，状态来源是组件声明。
 @framework-glass-dropdown-item-selected-bg: rgba(24, 144, 255, 0.12);
 
 // ========= Fallback (不支持 backdrop-filter 时) =========
+// `@framework-glass-fallback-bg`：高不透明度的实体回退表面，平台缺少背景模糊时优先保证文字可读。
 @framework-glass-fallback-bg: rgba(255, 255, 255, 0.95);
+// `@framework-glass-fallback-border`：实体回退表面的中性边界，避免依赖透明高光才可辨识容器。
 @framework-glass-fallback-border: rgba(0, 0, 0, 0.08);
 
 // ========= 补充颜色 Token =========
+// `@framework-color-text-quaternary`：最低强调文字/装饰预设，不能替代关键提示和操作名称。
 @framework-color-text-quaternary: #bfbfbf;
 
 // ========= 语义化颜色 =========
+// `@framework-color-success`：成功语义的强调色预设；具体状态必须由服务结果或组件状态明确决定。
 @framework-color-success: #52c41a;
+// `@framework-color-success-bg`：成功语义的浅背景预设，和对应强调色配对，重要状态仍需文字/图标说明。
 @framework-color-success-bg: #f6ffed;
+// `@framework-color-danger`：危险/错误语义的强调色预设；具体状态必须由服务结果或组件状态明确决定。
 @framework-color-danger: #ef4444;
+// `@framework-color-danger-bg`：危险/错误语义的浅背景预设，和对应强调色配对，重要状态仍需文字/图标说明。
 @framework-color-danger-bg: #fff2f0;
+// `@framework-color-warning`：警告语义的强调色预设；具体状态必须由服务结果或组件状态明确决定。
 @framework-color-warning: #f97316;
+// `@framework-color-warning-bg`：警告语义的浅背景预设，和对应强调色配对，重要状态仍需文字/图标说明。
 @framework-color-warning-bg: #fffbe6;
+// `@framework-color-purple`：紫色辅助分类语义的强调色预设；具体状态必须由服务结果或组件状态明确决定。
 @framework-color-purple: #8b5cf6;
+// `@framework-color-purple-bg`：紫色辅助分类语义的浅背景预设，和对应强调色配对，重要状态仍需文字/图标说明。
 @framework-color-purple-bg: #f9f0ff;
 
 // ========= Bento Grid (Dashboard) =========
+// `@framework-bento-gap`：可选卡片网格间隙 16px，实际列数应按容器自适应。
 @framework-bento-gap: 16px;
+// `@framework-bento-radius`：可选网格普通卡片圆角 20px，沿组件可读性决定是否接入。
 @framework-bento-radius: 20px;
+// `@framework-bento-radius-lg`：可选网格大卡片圆角 24px，与普通卡片形成层级。
 @framework-bento-radius-lg: 24px;
 
 // Bento Dock 动效（比菜单更克制）
+// `@framework-bento-dock-scale-hover`：可选网格悬停倍率 1.03，无单位，只缩放视觉而不改变布局盒。
 @framework-bento-dock-scale-hover: 1.03;
+// `@framework-bento-dock-scale-near`：可选网格邻项倍率 1.015，无单位，强度低于直接悬停。
 @framework-bento-dock-scale-near: 1.015;
+// `@framework-bento-dock-lift-hover`：可选网格直接悬停抬升 4px，应用时取负 Y 位移。
 @framework-bento-dock-lift-hover: 4px;
+// `@framework-bento-dock-lift-near`：可选网格邻项抬升 2px，避免所有卡片以同样幅度跳动。
 @framework-bento-dock-lift-near: 2px;
+
+// ───── 模块结束：src/styles/tokens.less ─────

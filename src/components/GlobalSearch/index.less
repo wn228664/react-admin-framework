@@ -1,3 +1,8 @@
+/*
+ * 模块职责：限制全局搜索弹窗内输入、提示和结果列表的布局，并让长结果自行滚动。
+ * 弹窗外框高度仍由 AdminModal 约束；结果项不能把正文撑到 footer 或文档根之外。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .global-search-trigger {
@@ -157,3 +162,5 @@
     background: #a8a8a8;
   }
 }
+
+// ───── 模块结束：src/components/GlobalSearch/index.less ─────

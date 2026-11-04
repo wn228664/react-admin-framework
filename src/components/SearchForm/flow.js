@@ -1,10 +1,15 @@
 /**
- * @file src/components/SearchForm/flow.js
- * @description SearchForm 纯逻辑 helper：统一字段归一化、首行/抽屉分组和回车触发判定，供 SearchForm 组件与测试复用。
+ * 模块职责：为搜索组件提供字段键、首行栅格分组、控件选项与 Enter 触发条件的纯规则。
+ * 这些函数不读取 Form、DOM 或网络；字段和选项来自调用方声明，缺失配置采用可展示的空值。
+ * Enter 会避开组合输入、文本域和控件弹层等不应提交的场景，调用方仍负责同步防重复。
  */
+// `SEARCH_FORM_DEFAULT_FIELD_SPAN`：普通字段默认占 6/24 栅格，允许 field.span 显式覆盖；与容器预算使用同一单位。
 export const SEARCH_FORM_DEFAULT_FIELD_SPAN = 6;
+// `SEARCH_FORM_DRAWER_FIELD_SPAN`：高级抽屉字段基础占 12/24 栅格；xs/sm 的响应式覆盖由渲染层负责。
 export const SEARCH_FORM_DRAWER_FIELD_SPAN = 12;
+// `SEARCH_FORM_DEFAULT_MAX_VISIBLE_SPAN`：首行默认总预算 24 栅格；窄容器可由组件缩小，超出项不丢弃。
 export const SEARCH_FORM_DEFAULT_MAX_VISIBLE_SPAN = 24;
+// `SEARCH_FORM_EMBEDDED_VARIANT`：嵌入 ProTable 的变体名称；仅控制根类名，不能改变搜索协议。
 export const SEARCH_FORM_EMBEDDED_VARIANT = 'embedded';
 /**
  * 生成 SearchForm 根容器 className。
@@ -44,11 +49,17 @@ export const splitSearchFormFields = (fields, maxVisibleSpan = SEARCH_FORM_DEFAU
     return { visibleFields: [], hiddenFields: [] };
   }
 
+  // `currentSpan`：本轮分组中首行已占栅格数，初始 0，只在字段成功进入首行时累加。
   let currentSpan = 0;
+  // `isOverflow`：首个超预算字段后的连续折叠标志；一旦为 true，后续字段全部进入高级组以保序。
   let isOverflow = false;
 
   return fields.reduce(
-    (result, field) => {
+    (
+      /* `result`：reduce 的本次分组累加器，仅含新建 visibleFields/hiddenFields 数组，不修改调用方 fields。 */ result,
+      /* `field`：按原顺序遍历的当前声明字段；超预算后保留到高级组，不跳过或重排。 */ field
+    ) => {
+      // `fieldSpan`：当前字段在普通首行模式下的栅格占用；与剩余预算比较，不读 DOM。
       const fieldSpan = getSearchFormFieldSpan(field, false);
 
       if (!isOverflow && currentSpan + fieldSpan <= maxVisibleSpan) {
@@ -114,19 +125,34 @@ export const getSearchFormMoreButtonText = (drawerVisible, fieldCount) => {
 };
 
 /**
- * 判断当前键盘事件是否应该触发 SearchForm 搜索。
- *
- * @param {{ key?: string, target?: { tagName?: string } }} event 键盘事件对象。
- * @returns {boolean} 为 true 时表示应该执行搜索。
+ * 判断本次 Enter 是否允许由搜索表单接管。
+ * @param {Object} event 原生或 React 键盘事件；同时检查 nativeEvent 的输入法状态和 229 兼容码。
+ * @returns {boolean} 普通未消费的 Enter 才返回 true；输入法、已处理事件、文本域、按钮、选择/日期控件和编辑区均保留自身行为。
+ * 此函数只判定，不阻止事件；调用方仍需同步任务锁并在触发搜索时阻止默认/冒泡。
  */
 export const shouldTriggerSearchFormEnter = (event) => {
-  if (event?.key !== 'Enter') {
+  if (
+    event?.key !== 'Enter' ||
+    event.defaultPrevented ||
+    event.isComposing ||
+    event.nativeEvent?.isComposing ||
+    event.keyCode === 229 ||
+    event.nativeEvent?.keyCode === 229
+  ) {
     return false;
   }
 
-  if (event?.target?.tagName === 'TEXTAREA') {
+  // `target`：键盘事件的实际目标；由原生/React 事件提供，用于排除文本域、编辑区和控件自有 Enter。
+  const target = event.target;
+  if (
+    ['TEXTAREA', 'BUTTON', 'SELECT'].includes(target?.tagName) ||
+    target?.isContentEditable ||
+    target?.closest?.('.ant-select, .ant-picker, [role="combobox"], [contenteditable="true"]')
+  ) {
     return false;
   }
 
   return true;
 };
+
+// ───── 模块结束：src/components/SearchForm/flow.js ─────

@@ -1,8 +1,17 @@
 /**
- * @file src/components/ProTable/flow.js
- * @description ProTable 运行时流程 helper：统一 request 包装、分页参数构造、本地排序 onChange 判定和分页配置合并，供 ProTable 主组件复用并补充单测护栏。
+ * 模块职责：收口 ProTable 查询参数、分页默认值以及 localSort 的事件转发判定。
+ * request 的拒绝必须保留到 UI；列表适配只规整结构，不把 HTTP 200 或某个业务 code 当成功。
+ * 纯函数不读 DOM 或改变表单，便于搜索/重置/分页沿同一合同测试。
+ */
+// 页容量缺省与 ProTable 主组件共用；重置会回到这一默认值。
+/**
+ * `PAGE_SIZE_DEFAULT`：表格默认页容量 10，搜索沿用当前容量，重置才恢复此值。
  */
 import { PAGE_SIZE_DEFAULT } from '@/constants/common';
+// 将调用方已经判定成功的响应转换为 list/total，不能代替服务端业务结果校验。
+/**
+ * `getRowsTotal`：规整 rows/list 与 data.rows/data.list 等成功列表结构，不代替服务端业务成功判定。
+ */
 import { getRowsTotal } from '@/utils/robust';
 /**
  * 判断 initialValues 是否为可用于 defaultParams 的有效对象。
@@ -25,15 +34,20 @@ export function hasProTableInitialValues(initialValues) {
  * @returns {Promise<{total: number, list: Array}>} useAntdTable 兼容的标准结构。
  */
 export async function runProTableRequest({ request, current, pageSize, formData }) {
+  // `safeFormData`：已提交条件的对象快照，非对象回退空对象；不承担字段 schema 或业务结果校验。
   const safeFormData = formData && typeof formData === 'object' ? formData : {};
+  // `params`：最终请求参数；条件先合并，current/pageSize 由表格最后固定，重名字段不能劫持分页。
   const params = {
+    ...safeFormData,
     current,
     pageSize,
-    ...safeFormData,
   };
 
   // 保留拒绝态，交给 useAntdTable 的 latest-wins 生命周期显示错误；失败不伪装为空列表。
+  // `response`：宿主 request 已解析的业务成功响应；拒绝原样传播，由 UI 展示失败。
   const response = await request(params);
+  // `rows`：共享适配器规整的当前页记录数组；作为 ahooks 的 list 返回，不复制记录对象。
+  // `total`：共享适配器转换的记录总数，非分页页数；无有效值时使用其默认 0。
   const { rows, total } = getRowsTotal(response);
   return { total, list: rows };
 }
@@ -68,14 +82,19 @@ export function resolveProTablePageSize({ paginationParams, tablePagination }) {
  * @returns {[Object, Object, any]} 传给 run 的 pagination/formData/extra 三元组。
  */
 export function buildReloadRunArguments({ antdTableParams, tablePagination, getFieldsValue }) {
+  // `paginationParams`：最近请求元组首项的安全对象，包含当前页容量和可能的扩展分页字段。
   const paginationParams = antdTableParams?.[0] && typeof antdTableParams[0] === 'object' ? antdTableParams[0] : {};
+  // `pageSize`：刷新时优先沿用最近请求、其次表格配置、最后公共默认的每页条数。
   const pageSize = resolveProTablePageSize({ paginationParams, tablePagination });
+  // `nextPagination`：刷新参数的新副本；保留扩展字段但把 current 固定为 1。
   const nextPagination = {
     ...paginationParams,
     current: 1,
     pageSize,
   };
+  // `formData`：最近已提交查询，只有缺失时才读取当前 Form；避免把未提交草稿替换查询。
   const formData = antdTableParams?.[1] ?? getFieldsValue();
+  // `extra`：最近请求元组第三项的扩展上下文，原样保留给 run，不猜内部业务语义。
   const extra = antdTableParams?.[2];
 
   return [nextPagination, formData, extra];
@@ -90,6 +109,7 @@ export function buildReloadRunArguments({ antdTableParams, tablePagination, getF
  * @returns {[Object, Object]} 传给 run 的 pagination/formData 二元组。
  */
 export function buildSearchRunArguments({ tablePagination, values }) {
+  // `pageSize`：普通搜索沿用的当前页容量；搜索只复位页码，重置才恢复默认容量。
   const pageSize = resolveProTablePageSize({ tablePagination });
   return [{ current: 1, pageSize }, values];
 }
@@ -123,6 +143,7 @@ export function normalizeProTableSortInfo(sorter) {
  * @returns {Object|null} 返回新 sortConfig；返回 null 代表这次不应更新 sortConfig。
  */
 export function buildNextLocalSortConfig({ action, sortInfo }) {
+  // `shouldUpdateSortConfig`：动作是否明确为 sort 或缺少 action 但存在有效 field；其它动作不能清空本地排序。
   const shouldUpdateSortConfig = action === 'sort' || (!action && sortInfo?.field);
 
   if (!shouldUpdateSortConfig) {
@@ -154,12 +175,17 @@ export function normalizeProTableFilters(filters) {
  * @returns {boolean} 两次 filters 等价时返回 true。
  */
 export function areProTableFiltersEqual(previousFilters, nextFilters) {
+  // `objA`：规整后的前次列筛选对象；仅用于结构比较，不修改其数组值。
   const objA = normalizeProTableFilters(previousFilters);
+  // `objB`：规整后的本次列筛选对象；与 objA 按全部键逐项浅比较。
   const objB = normalizeProTableFilters(nextFilters);
+  // `keys`：两次筛选键的去重并集，确保字段被新增或删除也能识别为变化。
   const keys = Array.from(new Set([...Object.keys(objA), ...Object.keys(objB)]));
 
-  return keys.every((key) => {
+  return keys.every((/* `key`：两次筛选键并集中的当前键，缺失值按 undefined 参与比较。 */ key) => {
+    // `valueA`：当前键在前次筛选中的值；数组按长度和顺序比较，其它值严格相等。
     const valueA = objA[key];
+    // `valueB`：当前键在本次筛选中的值；数组与非数组混用视为变化。
     const valueB = objB[key];
 
     if (Array.isArray(valueA) || Array.isArray(valueB)) {
@@ -169,7 +195,12 @@ export function areProTableFiltersEqual(previousFilters, nextFilters) {
       if (valueA.length !== valueB.length) {
         return false;
       }
-      return valueA.every((item, index) => item === valueB[index]);
+      return valueA.every(
+        (
+          /* `item`：前次筛选数组当前项，按严格相等与本次同位置项比较；不做隐式类型转换。 */ item,
+          /* `index`：筛选数组的零起始下标；只有长度相等后才读取另一数组同位置。 */ index
+        ) => item === valueB[index]
+      );
     }
 
     return valueA === valueB;
@@ -196,12 +227,15 @@ export function shouldForwardLocalSortChange({
   prevFilters,
   nextFilters,
 }) {
+  // `isPaginationChangeFallback`：缺少明确 action 时，由有效 current/pageSize 与前次快照比较得到的翻页判断。
   const isPaginationChangeFallback =
     typeof pagination?.current === 'number' &&
     typeof pagination?.pageSize === 'number' &&
     (pagination.current !== prevPagination.current || pagination.pageSize !== prevPagination.pageSize);
 
+  // `isLegacySortFallback`：旧事件缺少 action 但存在 sorter.field 的兼容判断；这种动作不能顺带触发请求。
   const isLegacySortFallback = !action && sortInfo?.field;
+  // `isFilterChangeFallback`：无 action 且不属于旧式排序时的筛选变化判断，作为请求转发兜底。
   const isFilterChangeFallback = !action && !isLegacySortFallback && !areProTableFiltersEqual(prevFilters, nextFilters);
 
   return (
@@ -242,8 +276,13 @@ export function buildProTablePagination(externalPagination, tablePagination) {
   return {
     showSizeChanger: true,
     showQuickJumper: true,
-    showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条/共 ${total} 条`,
+    showTotal: (
+      /* `total`：Antd 分页提供的当前总记录数，用于展示，不参与请求参数计算。 */ total,
+      /* `range`：Antd 分页提供的当前页起止记录序号二元组，空页的具体序号遵循 Antd 行为。 */ range
+    ) => `第 ${range[0]}-${range[1]} 条/共 ${total} 条`,
     ...(tablePagination || {}),
     ...(externalPagination || {}),
   };
 }
+
+// ───── 模块结束：src/components/ProTable/flow.js ─────

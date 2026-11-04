@@ -1,3 +1,8 @@
+/*
+ * 模块职责：保持导航层级文本与顶部操作区的间距和对比度。
+ * 样式只影响面包屑局部展示，不建立新的页面定位或滚动 owner；颜色来自共享 token。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .breadcrumb-container {
@@ -21,3 +26,5 @@
     }
   }
 }
+
+// ───── 模块结束：src/components/Breadcrumb/index.less ─────

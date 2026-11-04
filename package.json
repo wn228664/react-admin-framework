@@ -13,8 +13,9 @@
     "build:staging": "cross-env UMI_ENV=staging umi build",
     "postinstall": "umi setup",
     "lint": "eslint src --ext .js,.jsx --max-warnings=0",
+    "format:check": "prettier --check .",
     "test": "jest --runInBand",
-    "verify": "npm run lint && npm test && npm run build"
+    "verify": "npm run lint && npm run format:check && npm test && npm run build"
   },
   "dependencies": {
     "react": "^18.2.0",

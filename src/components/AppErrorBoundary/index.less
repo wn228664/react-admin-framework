@@ -1,3 +1,8 @@
+/*
+ * 模块职责：为全局渲染故障提供覆盖视口的恢复面板和开发堆栈滚动区。
+ * 错误面板自身滚动，生产不展示堆栈；引用主题 token 只取得语义颜色，不输出重复主题规则。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .app-error-boundary {
@@ -42,3 +47,5 @@
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.85);
 }
+
+// ───── 模块结束：src/components/AppErrorBoundary/index.less ─────

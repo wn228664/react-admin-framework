@@ -1,3 +1,7 @@
+/*
+ * 模块职责：限制弹窗和静态确认正文的可用高度，保持标题、关闭按钮与 footer 可见。
+ * wrap/content 不滚动，body 承接长内容；自定义 styles 不能去掉可收缩高度链或用页面滚动兜底。
+ */
 .admin-modal-wrap {
   overflow: hidden;
   overscroll-behavior: contain;
@@ -30,3 +34,5 @@
   overscroll-behavior: contain;
   overflow-wrap: anywhere;
 }
+
+// ───── 模块结束：src/components/AdminModal/index.less ─────

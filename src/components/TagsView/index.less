@@ -1,3 +1,8 @@
+/*
+ * 模块职责：提供可横向滚动的访问标签条、固定项反馈与关闭/右键操作外观。
+ * 标签内部只截断显示文字，完整标题仍由数据和 tooltip 保留；局部 Dock 变换不能撑开页面。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .tags-view-container {
@@ -59,7 +64,9 @@
     }
 
     .tags-view-item {
+      // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
       --framework-dock-ty: 0px;
+      // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
       --framework-dock-scale: 1;
       display: inline-flex;
       align-items: center;
@@ -111,7 +118,9 @@
 
       @media (hover: hover) and (pointer: fine) {
         &:hover {
+          // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
           --framework-dock-ty: -@framework-dock-chip-lift-hover;
+          // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
           --framework-dock-scale: @framework-dock-chip-scale-hover;
           background: @framework-glass-chip-bg-hover;
           border-color: @framework-glass-chip-border-hover;
@@ -135,7 +144,9 @@
       }
 
       &.active {
+        // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
         --framework-dock-ty: -@framework-dock-chip-lift-far;
+        // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
         --framework-dock-scale: @framework-dock-chip-scale-far;
         background: @framework-glass-chip-bg-active !important;
         border-color: @framework-glass-chip-border-active !important;
@@ -145,7 +156,9 @@
         z-index: 3;
 
         &:hover {
+          // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
           --framework-dock-ty: -@framework-dock-chip-lift-hover;
+          // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
           --framework-dock-scale: @framework-dock-chip-scale-hover;
         }
 
@@ -181,14 +194,18 @@
       @supports selector(:has(*)) {
         &:hover + .tags-view-item,
         &:has(+ .tags-view-item:hover) {
+          // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
           --framework-dock-ty: -@framework-dock-chip-lift-near;
+          // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
           --framework-dock-scale: @framework-dock-chip-scale-near;
           z-index: 1;
         }
 
         &:hover + .tags-view-item + .tags-view-item,
         &:has(+ .tags-view-item + .tags-view-item:hover) {
+          // `--framework-dock-ty`：此选择器状态的基础 Y 位移（CSS px，负值向上）；JS 距离变量优先覆盖，只影响 transform。
           --framework-dock-ty: -@framework-dock-chip-lift-far;
+          // `--framework-dock-scale`：此选择器状态的基础缩放倍率（无单位，1 为原尺寸）；JS 距离变量优先覆盖，保留原布局盒。
           --framework-dock-scale: @framework-dock-chip-scale-far;
         }
       }
@@ -223,3 +240,13 @@
     }
   }
 }
+
+// 仅抑制局部 Dock 位移，保留页面过渡生命周期与正常组件滚动。
+@media (prefers-reduced-motion: reduce) {
+  .tags-view-container .tags-view-item {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+// ───── 模块结束：src/components/TagsView/index.less ─────

@@ -1,3 +1,8 @@
+/**
+ * 模块职责：定义框架的可重复排版规则，供 format:check 与编辑器使用。
+ * 120 列、2 空格、分号和 LF 只影响文本布局；依赖锁、生成物、图片与文档按 ignore 文件排除。
+ * 格式检查不写文件，源码注释整理另以非注释 token 比对确认行为不变。
+ */
 module.exports = {
   // 一行最多 120 字符
   printWidth: 120,
@@ -20,7 +25,7 @@ module.exports = {
   // jsx 不使用单引号，而使用双引号
   jsxSingleQuote: false,
 
-  // 末尾需要有逗号
+  // ES5 允许的位置保留尾逗号，函数参数列表不强制增加。
   trailingComma: 'es5',
 
   // 大括号内的首尾需要空格
@@ -42,7 +47,7 @@ module.exports = {
   // 不需要自动在文件开头插入 @prettier
   insertPragma: false,
 
-  // 使用默认的折行标准
+  // 保留文档已有段落换行，避免格式化源码时顺带重排说明文字。
   proseWrap: 'preserve',
 
   // 根据显示样式决定 html 要不要折行
@@ -57,6 +62,8 @@ module.exports = {
   // 格式化嵌入的内容
   embeddedLanguageFormatting: 'auto',
 
-  // html, vue, jsx 中每个属性占一行
+  // 不强制每个 HTML/Vue/JSX 属性单独占行，长标签按 printWidth 自动换行。
   singleAttributePerLine: false,
 };
+
+// ───── 模块结束：.prettierrc.js ─────

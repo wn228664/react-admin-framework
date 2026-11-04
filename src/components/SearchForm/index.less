@@ -1,3 +1,8 @@
+/*
+ * 模块职责：组织搜索字段和工具区，配合 JS 的容器预算把额外条件放入高级抽屉。
+ * 极短工作区允许搜索组件自身滚动，不能把搜索高度无上限地从表格正文扣除。
+ */
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) '../../styles/tokens.less';
 
 .search-form-container {
@@ -84,3 +89,5 @@
 .search-form-container .search-form-fields {
   margin-bottom: 0.5rem;
 }
+
+// ───── 模块结束：src/components/SearchForm/index.less ─────

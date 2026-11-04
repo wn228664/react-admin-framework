@@ -1,12 +1,12 @@
-/**
- * @file src/styles/glass.less
- * @description 全局样式修正 - 确保 antd 弹层/控件使用纯白背景，避免透明叠加问题
- * 原则：玻璃效果仅用于 Layout 层（Sider/Header/TagsView），内容区域保持纯色
+/*
+ * 模块职责：把统一玻璃材质应用到 Antd 卡片、控件与浮层，避免每个页面重复配置外观。
+ * 仅消费语义 token，不持有布局高度；模糊/透明度变动需同时核对底层对比度和不支持效果时的可读性。
  */
-
+// reference 仅提供共享变量/混入，不重复输出整套主题 CSS。
 @import (reference) './tokens.less';
 
 // 弹层通用阴影
+// `@popup-shadow`：全局弹出层共用的三层阴影；长度为 CSS px，颜色含透明度，用于区分浮层与实体正文。
 @popup-shadow:
   0 6px 16px 0 rgba(0, 0, 0, 0.08),
   0 3px 6px -4px rgba(0, 0, 0, 0.12),
@@ -107,3 +107,5 @@
 .ant-table-wrapper .ant-table-tbody .ant-table-row > .ant-table-cell-row-hover.ant-table-cell-fix-left-last {
   background: #f6fbff !important;
 }
+
+// ───── 模块结束：src/styles/glass.less ─────

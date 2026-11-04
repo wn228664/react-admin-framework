@@ -1,3 +1,7 @@
+/*
+ * 模块职责：为后台建立唯一的文档高度边界，并提供示例内容的通用堆叠/换行布局。
+ * html/body/root 禁止滚动；min-height:0 必须沿父子布局链保留，长内容交给组件内部滚动。
+ */
 * {
   box-sizing: border-box;
 }
@@ -26,3 +30,5 @@ body {
 .starter-editor {
   min-width: 0;
 }
+
+// ───── 模块结束：src/global.less ─────
